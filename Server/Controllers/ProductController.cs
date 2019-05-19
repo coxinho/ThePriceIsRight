@@ -17,7 +17,7 @@ namespace ThePriceIsRightApi.Controllers
         {
             _context = context;
 
-            /*if (_context.ProductItems.Count() == 0)
+            if (_context.ProductItems.Count() == 0)
             {
                 // Create a new TodoItem if collection is empty,
                 // which means you can't delete all TodoItems.
@@ -33,8 +33,32 @@ namespace ThePriceIsRightApi.Controllers
                     Jumbo = 2.3F,
                     Dia = 1.9F
                 });
+                _context.ProductItems.Add(new ProductItem {
+                    Ean = 000000000001,
+                    Brand = "Nestle",
+                    Name = "Leite Gordo",
+                    Photo = "/media/leite-magro.png",
+                    Continente = 2.2F,
+                    Lidl = 2.1F,
+                    PingoDoce = 2.0F,
+                    Intermarche = 2.0F,
+                    Jumbo = 2.3F,
+                    Dia = 1.9F
+                });
+                _context.ProductItems.Add(new ProductItem {
+                    Ean = 000000000001,
+                    Brand = "Nestle",
+                    Name = "Chocolate Quente",
+                    Photo = "/media/leite-magro.png",
+                    Continente = 2.2F,
+                    Lidl = 2.1F,
+                    PingoDoce = 2.0F,
+                    Intermarche = 2.0F,
+                    Jumbo = 2.3F,
+                    Dia = 1.9F
+                });
                 _context.SaveChanges();
-            }*/
+            }
         }
 
         // GET: api/Product

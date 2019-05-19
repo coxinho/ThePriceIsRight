@@ -1,4 +1,5 @@
 Client/node_modules/
 Client/build/
 Server/bin/
-Server/wwwroot/
+Server/obj/
+wwwroot/*
