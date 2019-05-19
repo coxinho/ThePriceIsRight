@@ -1,0 +1,11 @@
+p.snackbar {
+	position: fixed;
+    bottom: 15px;
+    padding: 0 10px;
+    background: #000000bf;
+    color: white;
+    line-height: 40px;
+    border-radius: 5px;
+    text-align: center;
+    margin: 0;
+}
