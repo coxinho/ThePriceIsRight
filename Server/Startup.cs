@@ -29,6 +29,13 @@ namespace Server
         {
             services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("ProductList"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +50,8 @@ namespace Server
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            app.UseCors("MyPolicy"); // MyPolicy allows all origins. Remove this in production.
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseHttpsRedirection();
