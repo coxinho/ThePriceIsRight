@@ -8,6 +8,7 @@ using ThePriceIsRightApi.Models;
 namespace ThePriceIsRightApi.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -62,10 +63,14 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // GET: api/Product
+        // GET: api/Product?search=Nestle
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductItem>>> GetProductItems()
+        public JsonResult GetProductItems(string search)
         {
-            return await _context.ProductItems.ToListAsync();
+            if(search == null)
+                return new JsonResult(_context.ProductItems.ToArray());
+            else
+                return new JsonResult(_context.ProductItems.Where(ProductItem => ProductItem.Name.ToLower().Contains(search.ToLower())).ToArray());
         }
 
         // GET: api/Product/5
