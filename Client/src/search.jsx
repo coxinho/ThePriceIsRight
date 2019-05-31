@@ -4,15 +4,16 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
 import $ from 'jquery';
+import config from './config.js';
+
+const axios = require('axios');
 
 class Search extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			reply: null,
-			results: []
+			results: [],
 		};
 	}
 
@@ -40,19 +41,15 @@ class Search extends React.Component {
 								</p>
 								<p>{item.name}</p>
 								<p>{item.ean}</p>
+								<ul>
+									<li>Continente: {item.Continente}€</li>
+									<li>Lidl: {item.Lidl}€</li>
+									<li>Pingo-Doce: {item.pingoDoce}€</li>
+									<li>Intermarche: {item.Intermarche}€</li>
+									<li>Jumbo: {item.Jumbo}€</li>
+									<li>Dia: {item.Dia}€</li>
+								</ul>
 							</Col>
-							<Col lg="2">
-								<Image src={item.img} alt="product" rounded fluid />
-							</Col>
-							<ul>
-								{item.supermarkets
-									.sort((a, b) => (a.price > b.price ? 1 : -1))
-									.map(supermarket => (
-										<li>
-											{supermarket.name}: {supermarket.price}€
-										</li>
-									))}
-							</ul>
 						</Row>
 					);
 				})}
@@ -68,78 +65,17 @@ class Search extends React.Component {
 			return;
 		}
 		// Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
-		var reply = {
-			status: 'OK',
-			results: [
-				{
-					brand: 'Nestle',
-					name: 'Leite Magro',
-					ean: '123-456-789',
-					img: 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/201604/06/05220912300223____5__600x600.jpg',
-					supermarkets: [
-						{ name: 'PingoDoce', price: 3 },
-						{ name: 'Continente', price: 3.2 },
-						{ name: 'Lidl', price: 2.9 },
-						{ name: 'Intermarche', price: 2.5 }
-					]
-				},
-				{
-					brand: 'Nestle',
-					name: 'Leite Meio Gordo',
-					ean: '123-456-789',
-					img: 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/201604/06/05220912300223____5__600x600.jpg',
-					supermarkets: [
-						{ name: 'PingoDoce', price: 3 },
-						{ name: 'Continente', price: 3.2 },
-						{ name: 'Lidl', price: 2.9 },
-						{ name: 'Intermarche', price: 2.5 }
-					]
-				},
-				{
-					brand: 'Nestle',
-					name: 'Leite Gordo',
-					ean: '123-456-789',
-					img: 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/201604/06/05220912300223____5__600x600.jpg',
-					supermarkets: [
-						{ name: 'PingoDoce', price: 3 },
-						{ name: 'Continente', price: 3.2 },
-						{ name: 'Lidl', price: 2.9 },
-						{ name: 'Intermarche', price: 2.5 }
-					]
-				},
-				{
-					brand: 'Nestle',
-					name: 'KitKat',
-					ean: '123-456-789',
-					img: 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/201604/06/05220912300223____5__600x600.jpg',
-					supermarkets: [
-						{ name: 'PingoDoce', price: 3 },
-						{ name: 'Continente', price: 3.2 },
-						{ name: 'Lidl', price: 2.9 },
-						{ name: 'Intermarche', price: 2.5 }
-					]
-				},
-				{
-					brand: 'Nestle',
-					name: 'Chocapic',
-					ean: '123-456-789',
-					img: 'https://sgfm.elcorteingles.es/SGFM/dctm/MEDIA03/201604/06/05220912300223____5__600x600.jpg',
-					supermarkets: [
-						{ name: 'PingoDoce', price: 3 },
-						{ name: 'Continente', price: 3.2 },
-						{ name: 'Lidl', price: 2.9 },
-						{ name: 'Intermarche', price: 2.5 }
-					]
-				}
-			]
-		};
-
-		if (reply.status === 'OK') {
-			this.setState({ results: reply.results });
-		} else {
-			this.props.snackbarMessage('No search results!');
-			//console.log('No search results!');
-		}
+		//const url = `${config.baseURL}:${config.apiPort}/api/product?search=${term}`;
+		const url = `http://localhost:5000/api/product?search=${term}`;
+		axios.get(url) 
+		.then(function (response) {
+			console.log(response);
+			//this.setState({results: response});
+		})
+		.catch((error) => {
+			console.log(error);
+			//this.props.snackbarMessage(error);
+		});
 	}
 
 	manageProduct(product) {
