@@ -9,6 +9,7 @@ import Login from './login';
 import Register from './register';
 import Search from './search';
 import Share from './share';
+import Add from './add';
 import ManageSupermarkets from './manage-supermarkets';
 import ManageUsers from './manage-users';
 import Account from './account';
@@ -53,6 +54,7 @@ class Router extends React.Component {
 							<header>
 								<Link to="/">The Price Is Right</Link>
 								{loggedIn && <Link to="/share">Share</Link>}
+								{loggedIn && <Link to="/add">Add new</Link>}
 								{loggedIn && <Link to="/manage-supermarkets">Supermarkets</Link>}
 								{loggedIn && <Link to="/manage-users">Users</Link>}
 								{loggedIn && <Link to="/account">Account</Link>}
@@ -70,6 +72,7 @@ class Router extends React.Component {
 						<Route path="/login" render={props => (loggedIn ? <Redirect to="/" /> : <Login {...props} login={user => this.loginUser(user)} snackbarMessage={(msg) => this.snackbarMessage(msg)} />)} />
 						<Route path="/register" render={props => <Register {...props} snackbarMessage={(msg) => this.snackbarMessage(msg)} />} />
 						<Route path="/share" render={props => (loggedIn ? <Share snackbarMessage={(msg) => this.snackbarMessage(msg)} /> : <Login {...props} login={user => this.loginUser(user)} />)} />
+						<Route path="/add" render={props => (loggedIn ? <Add snackbarMessage={(msg) => this.snackbarMessage(msg)} /> : <Login {...props} login={user => this.loginUser(user)} />)} />
 						<Route
 							exact
 							path="/manage-supermarkets"
