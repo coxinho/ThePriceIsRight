@@ -1,6 +1,6 @@
-namespace ThePriceIsRightApi.Models
+namespace Server.Entities
 {
-    public class ProductItem
+    public class Product
     {
         public long Id { get; set; }
         public long Ean { get; set; }

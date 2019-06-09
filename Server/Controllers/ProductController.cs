@@ -1,28 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ThePriceIsRightApi.Models;
+using Server.Entities;
+using Server.Helpers;
 
 namespace ThePriceIsRightApi.Controllers
 {
     [Route("api/[controller]")]
     [Produces("application/json")]
+    [Authorize]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ProductContext _context;
+        private readonly DataContext _context;
 
-        public ProductController(ProductContext context)
+        public ProductController(DataContext context)
         {
             _context = context;
 
-            if (_context.ProductItems.Count() == 0)
+            if (_context.Products.Count() == 0)
             {
                 // Create a new TodoItem if collection is empty,
                 // which means you can't delete all TodoItems.
-                _context.ProductItems.Add(new ProductItem {
+                _context.Products.Add(new Product {
                     Ean = 000000000001,
                     Brand = "Nestle",
                     Name = "Leite Magro",
@@ -34,7 +37,7 @@ namespace ThePriceIsRightApi.Controllers
                     Jumbo = 2.3F,
                     Dia = 1.9F
                 });
-                _context.ProductItems.Add(new ProductItem {
+                _context.Products.Add(new Product {
                     Ean = 000000000001,
                     Brand = "Nestle",
                     Name = "Leite Gordo",
@@ -46,7 +49,7 @@ namespace ThePriceIsRightApi.Controllers
                     Jumbo = 2.3F,
                     Dia = 1.9F
                 });
-                _context.ProductItems.Add(new ProductItem {
+                _context.Products.Add(new Product {
                     Ean = 000000000001,
                     Brand = "Nestle",
                     Name = "Chocolate Quente",
@@ -64,42 +67,44 @@ namespace ThePriceIsRightApi.Controllers
 
         // GET: api/Product
         // GET: api/Product?search=Nestle
+        [AllowAnonymous]
         [HttpGet]
-        public JsonResult GetProductItems(string search)
+        public JsonResult GetProducts(string search)
         {
             if(search == null)
-                return new JsonResult(_context.ProductItems.ToArray());
+                return new JsonResult(_context.Products.ToArray());
             else
-                return new JsonResult(_context.ProductItems.Where(ProductItem => ProductItem.Name.ToLower().Contains(search.ToLower())).ToArray());
+                return new JsonResult(_context.Products.Where(Product => Product.Name.ToLower().Contains(search.ToLower())).ToArray());
         }
 
         // GET: api/Product/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductItem>> GetProductItem(long id)
+        public async Task<ActionResult<Product>> GetProduct(long id)
         {
-            var ProductItem = await _context.ProductItems.FindAsync(id);
+            var Product = await _context.Products.FindAsync(id);
 
-            if (ProductItem == null)
+            if (Product == null)
             {
                 return NotFound();
             }
 
-            return ProductItem;
+            return Product;
         }
 
         // POST: api/Product
         [HttpPost]
-        public async Task<ActionResult<ProductItem>> PostProductItem(ProductItem product)
+        public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            _context.ProductItems.Add(product);
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetProductItem), new { id = product.Id }, product);
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
 
         // PUT: api/Product/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProductItem(long id, ProductItem product)
+        public async Task<IActionResult> PutProduct(long id, Product product)
         {
             if (id != product.Id)
             {
@@ -114,16 +119,16 @@ namespace ThePriceIsRightApi.Controllers
 
         // DELETE: api/Product/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductItem(long id)
+        public async Task<IActionResult> DeleteProduct(long id)
         {
-            var productItem = await _context.ProductItems.FindAsync(id);
+            var Product = await _context.Products.FindAsync(id);
 
-            if (productItem == null)
+            if (Product == null)
             {
                 return NotFound();
             }
 
-            _context.ProductItems.Remove(productItem);
+            _context.Products.Remove(Product);
             await _context.SaveChangesAsync();
 
             return NoContent();

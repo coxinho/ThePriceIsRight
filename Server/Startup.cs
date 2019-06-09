@@ -15,7 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using ThePriceIsRightApi.Models;
 using Server.Helpers;
 using Server.Services;
 
@@ -45,12 +44,12 @@ namespace Server
             services.AddAutoMapper();
             
             // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var appAuthentication = Configuration.GetSection("Authentication");
+            services.Configure<AppSettings>(appAuthentication);
 
             // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes("thisisaverylongandawesomepassword"/* appSettings.Secret */);
+            var appSettings = appAuthentication.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes("thisisaverylongandawesomepassword" /*appSettings.Secret*/);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
