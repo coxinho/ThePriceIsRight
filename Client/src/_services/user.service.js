@@ -1,7 +1,7 @@
 import config from 'config';
 import { authHeader } from '../_helpers';
 
-config.apiUrl = 'http://localhost:5000';
+//config.apiUrl = 'https://localhost:5001';
 
 export const userService = {
     login,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Route } from 'react-router-dom';
+import { Router, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { history } from '../_helpers';
@@ -21,32 +21,62 @@ class App extends React.Component {
     }
 
     render() {
-        const { alert } = this.props;
+        const { alert, user } = this.props;
         return (
             <div className="jumbotron">
-                <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
-                        {alert.message &&
-                            <div className={`alert ${alert.type}`}>{alert.message}</div>
-                        }
-                        <Router history={history}>
-                            <div>
-                                <PrivateRoute exact path="/" component={HomePage} />
-                                <Route path="/login" component={LoginPage} />
-                                <Route path="/register" component={RegisterPage} />
+                <Router history={history}>
+                    <div className="container">
+                        <div class="row">
+                            <div class="col-sm">
+                                <Link to="/"><b>The Price Is Right</b></Link>
                             </div>
-                        </Router>
+                            <div class="col-sm">
+                                <Link to="/share">Share</Link>
+                            </div>
+                            <div class="col-sm">
+                                <Link to="/add-new">Add new</Link>
+                            </div>
+                            <div class="col-sm">
+                                <Link to="/supermarkets">Supermarkets</Link>
+                            </div>
+                            <div class="col-sm">
+                                <Link to="/users">Users</Link>
+                            </div>
+                            <div class="col-sm">
+                                {user && <p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p>}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div className="col-sm">
+                                {alert.message &&
+                                    <div className={`alert ${alert.type}`}>{alert.message}</div>
+                                }
+                                
+                                    <div>
+                                        <PrivateRoute exact path="/" component={HomePage} />
+                                        <Route path="/login" component={LoginPage} />
+                                        <Route path="/register" component={RegisterPage} />
+                                        <Route path="/share" component={HomePage} />
+                                        <Route path="/add-new" component={HomePage} />
+                                        <Route path="/supermarkets" component={HomePage} />
+                                        <Route path="/users" component={HomePage} />
+                                        <Route path="/account" component={HomePage} />
+                                    </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </Router>
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { alert } = state;
+    const { alert, authentication } = state;
+    const { user } = authentication;
     return {
-        alert
+        alert,
+        user
     };
 }
 
