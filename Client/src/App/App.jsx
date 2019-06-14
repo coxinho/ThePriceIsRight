@@ -8,10 +8,15 @@ import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
 import { RegisterPage } from '../RegisterPage';
+import { Snackbar } from '../Snackbar';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
+        
+        this.state = {
+            time: null
+        };
 
         const { dispatch } = this.props;
         history.listen((location, action) => {
@@ -21,7 +26,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { alert, user } = this.props;
+        const { alert, user, snackbarMessage } = this.props;
         return (
             <div className="jumbotron">
                 <Router history={history}>
@@ -66,8 +71,19 @@ class App extends React.Component {
                         </div>
                     </div>
                 </Router>
+                {/*<Snackbar message={snackbarMessage} />*/}
             </div>
         );
+    }
+
+    snackbarMessage(msg) {
+        this.setState({ snackbarMessage: msg });
+		clearTimeout(this.state.time);
+		this.setState({
+			time: setTimeout(() => {
+				this.setState({ snackbarMessage: '' });
+			}, 4000)
+		});
     }
 }
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
@@ -72,17 +71,19 @@ class HomePage extends React.Component {
 	handleSubmit(e) {
         e.preventDefault();
 
-        this.setState({ searching: true });
-
 		// Get search term
-		/*const term = $('#search').val();
+        const term = document.getElementById('searchterm').value;
+        console.log('Term: ' + term);
 		if (term === '') {
-			this.props.snackbarMessage('Empty query!');
+			//this.props.snackbarMessage('Empty query!');
 			return;
 		}
+
+        this.setState({ searching: true });
+
 		// Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
 		//const url = `${config.baseURL}:${config.apiPort}/api/product?search=${term}`;
-		const url = `http://localhost:5000/api/product?search=${term}`;
+		/*const url = `http://localhost:5000/api/product?search=${term}`;
 		axios.get(url) 
 		.then(function (response) {
 			console.log(response);
