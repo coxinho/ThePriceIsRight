@@ -61,6 +61,54 @@ namespace ThePriceIsRightApi.Controllers
                     Jumbo = 2.3F,
                     Dia = 1.9F
                 });
+                _context.Products.Add(new Product {
+                    Ean = 000000000001,
+                    Brand = "Nestle",
+                    Name = "Leite diferente",
+                    Photo = "/media/leite-magro.png",
+                    Continente = 2.2F,
+                    Lidl = 2.1F,
+                    PingoDoce = 2.0F,
+                    Intermarche = 2.0F,
+                    Jumbo = 2.3F,
+                    Dia = 1.9F
+                });
+                _context.Products.Add(new Product {
+                    Ean = 000000000001,
+                    Brand = "Nestle",
+                    Name = "Leite de soja",
+                    Photo = "/media/leite-magro.png",
+                    Continente = 2.2F,
+                    Lidl = 2.1F,
+                    PingoDoce = 2.0F,
+                    Intermarche = 2.0F,
+                    Jumbo = 2.3F,
+                    Dia = 1.9F
+                });
+                _context.Products.Add(new Product {
+                    Ean = 000000000001,
+                    Brand = "Nestle",
+                    Name = "Leite de côco",
+                    Photo = "/media/leite-magro.png",
+                    Continente = 2.2F,
+                    Lidl = 2.1F,
+                    PingoDoce = 2.0F,
+                    Intermarche = 2.0F,
+                    Jumbo = 2.3F,
+                    Dia = 1.9F
+                });
+                _context.Products.Add(new Product {
+                    Ean = 000000000001,
+                    Brand = "Nestle",
+                    Name = "Leite Meio-Gordo",
+                    Photo = "/media/leite-magro.png",
+                    Continente = 2.2F,
+                    Lidl = 2.1F,
+                    PingoDoce = 2.0F,
+                    Intermarche = 2.0F,
+                    Jumbo = 2.3F,
+                    Dia = 1.9F
+                });
                 _context.SaveChanges();
             }
         }

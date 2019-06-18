@@ -1,17 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 import { userActions } from '../_actions';
+import { config } from '../_config';
 
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            searching: false
+            searching: false,
+            searchTerm: '',
+            searchSuccess: false,
+            searchResults: [],
         };
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
@@ -22,29 +28,85 @@ class HomePage extends React.Component {
         return (e) => this.props.dispatch(userActions.delete(id));
     }
 
+    handleChange(event) {
+        const { value } = event.target;
+        this.setState({ searchTerm: value });
+    }
+    
+    handleSubmit(e) {
+        e.preventDefault();
+
+        // Get search term
+        const { searchTerm } = this.state;
+		if (searchTerm === '') {
+			//this.props.snackbarMessage('Empty query!');
+			return;
+		}
+
+        this.setState({ searching: true });
+
+		// Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
+		const url = `${config.baseURL}:${config.apiPort}/api/product?search=${searchTerm}`;
+		//const url = `http://localhost:5000/api/product?search=${term}`;
+		axios.get(url) 
+		.then((response) => {
+            const { data } = response;
+            this.setState({searchResults: data, searchSuccess:true, searching: false});
+            console.log(data);
+		})
+		.catch((error) => {
+			console.log(error);
+			//this.props.snackbarMessage(error);
+		});
+	}
+
     render() {
         const { users } = this.props;
         const { searching } = this.state;
+        const { searchSuccess, searchResults } = this.state;
         return (
             <div class="container">
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div class="form-row justify-content-between align-items-end">
                         <div class="col-9">
-                            <input type="text" class="form-control" id="searchterm" placeholder="Search..." />
+                            <input type="text" class="form-control" id="searchterm" placeholder="Search..." onChange={this.handleChange} />
                         </div>
                         <div class="col-3">
                             <button type="submit" class="btn btn-primary btn-block">Search</button>
                         </div>
                     </div>
                 </form>
-                {searching &&
-                    <div class="row justify-content-center">
-                        <h1>Searching...</h1>
-                    </div>
-                }
                 
-
-
+                <div className="row py-4">
+                    {searching &&
+                        <div class="row justify-content-center">
+                            <h1>Searching...</h1>
+                        </div>
+                    }
+                    {searchSuccess &&
+                        searchResults.map((product, index) =>
+                            <div class="col-3">
+                                <div class="card mb-4" style={{width: 200 + 'px'}}>
+                                    {/*<img src="#" class="card-img-top" alt="Image alt text" />*/}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{product.brand}</h5>
+                                        <p class="card-text">{product.name}</p>
+                                        <ul>
+                                            <li>Continente: {product.continente}€</li>
+                                            <li>Dia: {product.dia}€</li>
+                                            <li>Intermarche: {product.intermarche}€</li>
+                                            <li>Pingo-Doce: {product.pingoDoce}€</li>
+                                            <li>Jumbo: {product.jumbo}€</li>
+                                            <li>Lidl: {product.lidl}€</li>
+                                        </ul>
+                                        <a href="#" class="btn btn-primary">Manage</a>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
+                
                 <div className="col-md-6 col-md-offset-3">
                     <h3>All registered users:</h3>
                     {users.loading && <em>Loading users...</em>}
@@ -67,33 +129,6 @@ class HomePage extends React.Component {
             </div>
         );
     }
-
-	handleSubmit(e) {
-        e.preventDefault();
-
-		// Get search term
-        const term = document.getElementById('searchterm').value;
-        console.log('Term: ' + term);
-		if (term === '') {
-			//this.props.snackbarMessage('Empty query!');
-			return;
-		}
-
-        this.setState({ searching: true });
-
-		// Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
-		//const url = `${config.baseURL}:${config.apiPort}/api/product?search=${term}`;
-		/*const url = `http://localhost:5000/api/product?search=${term}`;
-		axios.get(url) 
-		.then(function (response) {
-			console.log(response);
-			//this.setState({results: response});
-		})
-		.catch((error) => {
-			console.log(error);
-			//this.props.snackbarMessage(error);
-		});*/
-	}
 }
 
 function mapStateToProps(state) {
