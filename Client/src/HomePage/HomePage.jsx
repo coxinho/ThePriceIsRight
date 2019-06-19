@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
@@ -20,13 +21,13 @@ class HomePage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount() {
+    /*componentDidMount() {
         this.props.dispatch(userActions.getAll());
-    }
+    }*/
 
-    handleDeleteUser(id) {
+    /*handleDeleteUser(id) {
         return (e) => this.props.dispatch(userActions.delete(id));
-    }
+    }*/
 
     handleChange(event) {
         const { value } = event.target;
@@ -47,7 +48,6 @@ class HomePage extends React.Component {
 
 		// Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
 		const url = `${config.baseURL}:${config.apiPort}/api/product?search=${searchTerm}`;
-		//const url = `http://localhost:5000/api/product?search=${term}`;
 		axios.get(url) 
 		.then((response) => {
             const { data } = response;
@@ -61,36 +61,37 @@ class HomePage extends React.Component {
 	}
 
     render() {
-        const { users } = this.props;
+        const { user } = this.props;
         const { searching } = this.state;
         const { searchSuccess, searchResults } = this.state;
         return (
-            <div class="container">
+            <div className="container mt-4">
                 <form name="form" onSubmit={this.handleSubmit}>
-                    <div class="form-row justify-content-between align-items-end">
-                        <div class="col-9">
-                            <input type="text" class="form-control" id="searchterm" placeholder="Search..." onChange={this.handleChange} />
+                    <div className="form-row justify-content-between align-items-end">
+                        <div className="col-9">
+                            <input type="text" className="form-control" id="searchterm" placeholder="Search..." onChange={this.handleChange} />
                         </div>
-                        <div class="col-3">
-                            <button type="submit" class="btn btn-primary btn-block">Search</button>
+                        <div className="col-3">
+                            <button type="submit" className="btn btn-primary btn-block">Search</button>
                         </div>
                     </div>
                 </form>
                 
                 <div className="row py-4">
                     {searching &&
-                        <div class="row justify-content-center">
+                        <div className="row justify-content-center">
                             <h1>Searching...</h1>
                         </div>
                     }
                     {searchSuccess &&
                         searchResults.map((product, index) =>
-                            <div class="col-3">
-                                <div class="card mb-4" style={{width: 200 + 'px'}}>
+                            <div className="col-3" key={index}>
+                                <div className="card mb-4" style={{width: 200 + 'px'}}>
                                     {/*<img src="#" class="card-img-top" alt="Image alt text" />*/}
-                                    <div class="card-body">
-                                        <h5 class="card-title">{product.brand}</h5>
-                                        <p class="card-text">{product.name}</p>
+                                    <div className="card-body">
+                                        <h5 className="card-title">{product.brand}</h5>
+                                        <p className="card-text">{product.name}</p>
+                                        <p className="card-text">{product.ean}</p>
                                         <ul>
                                             <li>Continente: {product.continente}€</li>
                                             <li>Dia: {product.dia}€</li>
@@ -99,7 +100,12 @@ class HomePage extends React.Component {
                                             <li>Jumbo: {product.jumbo}€</li>
                                             <li>Lidl: {product.lidl}€</li>
                                         </ul>
-                                        <a href="#" class="btn btn-primary">Manage</a>
+                                        {user && <Link to={{
+                                            pathname: '/product-update',
+                                            state: {
+                                                product: product
+                                            }
+                                        }}  className="btn btn-primary">Update price</Link>}
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +113,7 @@ class HomePage extends React.Component {
                     }
                 </div>
                 
-                <div className="col-md-6 col-md-offset-3">
+                {/*<div className="col-md-6 col-md-offset-3">
                     <h3>All registered users:</h3>
                     {users.loading && <em>Loading users...</em>}
                     {users.error && <span className="text-danger">ERROR: {users.error}</span>}
@@ -125,18 +131,18 @@ class HomePage extends React.Component {
                             )}
                         </ul>
                     }
-                </div>
+                </div>*/}
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { users, authentication } = state;
+    const { /*users,*/ authentication } = state;
     const { user } = authentication;
     return {
         user,
-        users
+        //users
     };
 }
 

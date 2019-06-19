@@ -8,6 +8,8 @@ import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
 import { RegisterPage } from '../RegisterPage';
+import { ProductUpdate } from '../ProductUpdate';
+import { Users } from '../Users';
 import { Snackbar } from '../Snackbar';
 
 class App extends React.Component {
@@ -31,41 +33,33 @@ class App extends React.Component {
             <div className="jumbotron">
                 <Router history={history}>
                     <div className="container">
-                        <div class="row">
-                            <div class="col-sm">
+                        <div className="row">
+                            <div className="col-sm">
                                 <Link to="/"><b>The Price Is Right</b></Link>
                             </div>
-                            <div class="col-sm">
-                                <Link to="/share">Share</Link>
-                            </div>
-                            <div class="col-sm">
-                                <Link to="/add-new">Add new</Link>
-                            </div>
-                            <div class="col-sm">
-                                <Link to="/supermarkets">Supermarkets</Link>
-                            </div>
-                            <div class="col-sm">
-                                <Link to="/users">Users</Link>
-                            </div>
-                            <div class="col-sm">
-                                {user && <p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p>}
-                            </div>
+                            {user && <div className="col-sm"><Link to="/add-new">Add new</Link></div>}
+                            {user && <div className="col-sm"><Link to="/users">Users</Link></div>}
+                            {/*user && <div class="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>*/}
+                            {user ?
+                                (<div className="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>)
+                                :
+                                (<div className="col-sm text-right"><Link to="/login">Login</Link></div>)
+                            }
                         </div>
-                        <div class="row">
+                        <div className="row">
                             <div className="col-sm">
                                 {alert.message &&
                                     <div className={`alert ${alert.type}`}>{alert.message}</div>
                                 }
                                 
                                     <div>
-                                        <PrivateRoute exact path="/" component={HomePage} />
+                                        <Route exact path="/" component={HomePage} />
                                         <Route path="/login" component={LoginPage} />
                                         <Route path="/register" component={RegisterPage} />
-                                        <Route path="/share" component={HomePage} />
-                                        <Route path="/add-new" component={HomePage} />
-                                        <Route path="/supermarkets" component={HomePage} />
-                                        <Route path="/users" component={HomePage} />
-                                        <Route path="/account" component={HomePage} />
+                                        <PrivateRoute path="/product-update" component={ProductUpdate} />
+                                        <PrivateRoute path="/add-new" component={HomePage} />
+                                        <PrivateRoute path="/users" component={Users} />
+                                        <PrivateRoute path="/account" component={HomePage} />
                                     </div>
                             </div>
                         </div>
