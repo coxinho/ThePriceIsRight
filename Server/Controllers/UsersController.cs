@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
@@ -20,15 +20,29 @@ namespace Server.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
+        /*private readonly DataContext _context;*/
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings/*, DataContext context*/)
         {
+            //_context = context;
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+
+            /*string password = "123456";
+            byte[] passwordHash, passwordSalt;
+            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            _context.Users.Add(new User {
+                    FirstName = "Cristina",
+                    LastName = "Coxinho",
+                    Username = "cristinacoxinho",
+                    PasswordHash = passwordHash,
+                    PasswordSalt = passwordSalt,
+                    Admin = true
+            });*/
         }
 
         // POST: /users/authenticate
@@ -61,6 +75,7 @@ namespace Server.Controllers
                 Username = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Admin = user.Admin,
                 Token = tokenString
             });
         }
@@ -131,6 +146,20 @@ namespace Server.Controllers
         {
             _userService.Delete(id);
             return Ok();
+        }
+
+        // private helper methods
+
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
         }
     }
 }

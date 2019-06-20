@@ -21,14 +21,6 @@ class HomePage extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    /*componentDidMount() {
-        this.props.dispatch(userActions.getAll());
-    }*/
-
-    /*handleDeleteUser(id) {
-        return (e) => this.props.dispatch(userActions.delete(id));
-    }*/
-
     handleChange(event) {
         const { value } = event.target;
         this.setState({ searchTerm: value });
@@ -105,44 +97,23 @@ class HomePage extends React.Component {
                                             state: {
                                                 product: product
                                             }
-                                        }}  className="btn btn-primary">Update price</Link>}
+                                        }}  className="btn btn-primary">Update product</Link>}
                                     </div>
                                 </div>
                             </div>
                         )
                     }
                 </div>
-                
-                {/*<div className="col-md-6 col-md-offset-3">
-                    <h3>All registered users:</h3>
-                    {users.loading && <em>Loading users...</em>}
-                    {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                    {users.items &&
-                        <ul>
-                            {users.items.map((user, index) =>
-                                <li key={user.id}>
-                                    {user.firstName + ' ' + user.lastName}
-                                    {
-                                        user.deleting ? <em> - Deleting...</em>
-                                        : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                        : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
-                                    }
-                                </li>
-                            )}
-                        </ul>
-                    }
-                </div>*/}
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { /*users,*/ authentication } = state;
+    const { authentication } = state;
     const { user } = authentication;
     return {
         user,
-        //users
     };
 }
 

@@ -36,53 +36,55 @@ class ProductUpdate extends React.Component {
 
         // Get search term
         let { product } = this.state;
-        /*product = {
-            brand: 'NESTLE'
-        };*/
+
 		if (product.brand && product.name && product.ean && product.continente && product.dia && product.intermarche && product.pingoDoce && product.jumbo && product.lidl) {
             this.setState({ updating: true });
 
             // Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
-            //const url = `${config.baseURL}:${config.apiPort}/api/product?search=${searchTerm}`;
-            /*axios.get(url) 
+            const url = `${config.baseURL}:${config.apiPort}/api/product/${product.id}`;
+            axios
+            .put(url, JSON.stringify(product), {headers: {"Content-Type": "application/json"}})
             .then((response) => {
-                const { data } = response;
-                this.setState({searchResults: data, searchSuccess:true, searching: false});
-                console.log(data);
+                console.log(response);
+                this.setState({updatedSuccessful: true, updating: false});
             })
             .catch((error) => {
                 console.log(error);
                 //this.props.snackbarMessage(error);
-            });*/
+            });
 		}
 	}
 
     render() {
-        const { submitted, updating } = this.state;
+        const { submitted, updating, updatedSuccessful } = this.state;
         const { product } = this.props.location.state;
         const { brand, name, ean, continente, dia, intermarche, pingoDoce, jumbo, lidl } = product;
         return (
             <div className="container mt-4">
-                <form name="form" onSubmit={this.handleSubmit}>
+                {updatedSuccessful && 
+                <div className="alert alert-success" role="alert">
+                    The product was successfuly updated!
+                </div>}
+                <form name="form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                     <div className="form-row justify-content-between align-items-start">
                         <div className="col-6">
                             <div className={'form-group' + (submitted && !brand ? ' has-error' : '')}>
                                 <label htmlFor="brand">Brand</label>
-                                <input type="text" className="form-control" name="brand" value={brand} onChange={this.handleChange} />
+                                <input type="text" className="form-control" name="brand" value={brand} onChange={this.handleChange} required />
                                 {submitted && !brand &&
                                     <div className="help-block">Brand is required</div>
                                 }
                             </div>
                             <div className={'form-group' + (submitted && !name ? ' has-error' : '')}>
                                 <label htmlFor="name">Name</label>
-                                <input type="text" className="form-control" name="name" value={name} onChange={this.handleChange} />
+                                <input type="text" className="form-control" name="name" value={name} onChange={this.handleChange} required />
                                 {submitted && !name &&
                                     <div className="help-block">Name is required</div>
                                 }
                             </div>
                             <div className={'form-group' + (submitted && !ean ? ' has-error' : '')}>
                                 <label htmlFor="ean">EAN</label>
-                                <input type="text" className="form-control" name="ean" value={ean} onChange={this.handleChange} />
+                                <input type="text" className="form-control" name="ean" value={ean} onChange={this.handleChange} required />
                                 {submitted && !ean &&
                                     <div className="help-block">EAN is required</div>
                                 }
@@ -102,7 +104,7 @@ class ProductUpdate extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input type="text" className="form-control" name="continente" value={continente} onChange={this.handleChange} />
+                                    <input type="text" className="form-control" name="continente" value={continente} onChange={this.handleChange} required />
                                 </div>
                                 {submitted && !continente &&
                                     <div className="help-block">Continente is required</div>
@@ -115,7 +117,7 @@ class ProductUpdate extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input type="text" className="form-control" name="dia" value={dia} onChange={this.handleChange} />
+                                    <input type="text" className="form-control" name="dia" value={dia} onChange={this.handleChange} required />
                                 </div>
                                 {submitted && !dia &&
                                     <div className="help-block">Dia is required</div>
@@ -127,7 +129,7 @@ class ProductUpdate extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input type="text" className="form-control" name="intermarche" value={intermarche} onChange={this.handleChange} />
+                                    <input type="text" className="form-control" name="intermarche" value={intermarche} onChange={this.handleChange} required />
                                 </div>
                                 {submitted && !intermarche &&
                                     <div className="help-block">Intermarche is required</div>
@@ -139,7 +141,7 @@ class ProductUpdate extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input type="text" className="form-control" name="pingoDoce" value={pingoDoce} onChange={this.handleChange} />
+                                    <input type="text" className="form-control" name="pingoDoce" value={pingoDoce} onChange={this.handleChange} required />
                                 </div>
                                 {submitted && !pingoDoce &&
                                     <div className="help-block">Pingo-Doce is required</div>
@@ -151,7 +153,7 @@ class ProductUpdate extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input type="text" className="form-control" name="jumbo" value={jumbo} onChange={this.handleChange} />
+                                    <input type="text" className="form-control" name="jumbo" value={jumbo} onChange={this.handleChange} required />
                                 </div>
                                 {submitted && !jumbo &&
                                     <div className="help-block">Jumbo is required</div>
@@ -163,7 +165,7 @@ class ProductUpdate extends React.Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text">€</span>
                                     </div>
-                                    <input type="text" className="form-control" name="lidl" value={lidl} onChange={this.handleChange} />
+                                    <input type="text" className="form-control" name="lidl" value={lidl} onChange={this.handleChange} required />
                                 </div>
                                 {submitted && !lidl &&
                                     <div className="help-block">Lidl is required</div>

@@ -38,7 +38,7 @@ class App extends React.Component {
                                 <Link to="/"><b>The Price Is Right</b></Link>
                             </div>
                             {user && <div className="col-sm"><Link to="/add-new">Add new</Link></div>}
-                            {user && <div className="col-sm"><Link to="/users">Users</Link></div>}
+                            {user && user.admin && <div className="col-sm"><Link to="/users">Users</Link></div>}
                             {/*user && <div class="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>*/}
                             {user ?
                                 (<div className="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>)
