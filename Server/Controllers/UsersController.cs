@@ -20,21 +20,21 @@ namespace Server.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        /*private readonly DataContext _context;*/
+        private readonly DataContext _context;
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings/*, DataContext context*/)
+        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, DataContext context)
         {
-            //_context = context;
+            _context = context;
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
 
-            /*string password = "123456";
+            string password = "123456";
             byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            UserService.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             _context.Users.Add(new User {
                     FirstName = "Cristina",
                     LastName = "Coxinho",
@@ -42,7 +42,8 @@ namespace Server.Controllers
                     PasswordHash = passwordHash,
                     PasswordSalt = passwordSalt,
                     Admin = true
-            });*/
+            });
+            _context.SaveChanges();
         }
 
         // POST: /users/authenticate
@@ -120,6 +121,7 @@ namespace Server.Controllers
         }
 
         // PUT: /users/{id}
+        [AllowAnonymous]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]UserDto userDto)
         {
@@ -146,20 +148,6 @@ namespace Server.Controllers
         {
             _userService.Delete(id);
             return Ok();
-        }
-
-        // private helper methods
-
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            if (password == null) throw new ArgumentNullException("password");
-            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
-
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
         }
     }
 }

@@ -4,14 +4,25 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { config } from '../_config';
 
-class ProductUpdate extends React.Component {
+class AddNewProduct extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            product: {
+                brand: '',
+                name: '',
+                ean: '',
+                continente: '',
+                lidl: '',
+                pingoDoce: '',
+                dia: '',
+                intermarche: '',
+                jumbo: '',
+            },
             submitted: false,
-            updating: false,
-            updated: false,
+            creating: false,
+            created: false,
         };
 
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -19,9 +30,10 @@ class ProductUpdate extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    componentDidMount () {
-        const { product } = this.props.location.state;
-        this.setState({ product });
+    componentDidMount() {
+        const { user } = this.props;
+        if(!user)
+            history.push('/login');
     }
     
     handleChange(e) {
@@ -36,18 +48,19 @@ class ProductUpdate extends React.Component {
 
         this.setState({ submitted: true });
 
-        const { product } = this.state;
+        // Get search term
+        let { product } = this.state;
 
 		if (product.brand && product.name && product.ean && product.continente && product.dia && product.intermarche && product.pingoDoce && product.jumbo && product.lidl) {
-            this.setState({ updating: true });
+            this.setState({ creating: true });
 
             // Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
-            const url = `${config.baseURL}:${config.apiPort}/api/product/${product.id}`;
+            const url = `${config.baseURL}:${config.apiPort}/api/product/`;
             axios
-            .put(url, JSON.stringify(product), {headers: {"Content-Type": "application/json"}})
+            .post(url, JSON.stringify(product), {headers: {"Content-Type": "application/json"}})
             .then((response) => {
                 console.log(response);
-                this.setState({updated: true, updating: false});
+                this.setState({created: true, creating: false});
             })
             .catch((error) => {
                 console.log(error);
@@ -57,15 +70,15 @@ class ProductUpdate extends React.Component {
 	}
 
     render() {
-        const { submitted, updating, updated } = this.state;
-        const { product } = this.props.location.state;
+        const { submitted, creating, created } = this.state;
+        const { product } = this.state;
         const { brand, name, ean, continente, dia, intermarche, pingoDoce, jumbo, lidl } = product;
         return (
             <div className="container mt-4">
-                <h2>Update product</h2>
-                {updated && 
+                <h2>Add New Product</h2>
+                {created && 
                 <div className="alert alert-success" role="alert">
-                    The product was successfuly updated!
+                    The product was successfuly created!
                 </div>}
                 <form name="form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                     <div className="form-row justify-content-between align-items-start">
@@ -92,8 +105,8 @@ class ProductUpdate extends React.Component {
                                 }
                             </div>
                             <div className="form-group">
-                                <button className="btn btn-primary">Update</button>
-                                {updating &&
+                                <button className="btn btn-primary">Create new product</button>
+                                {creating &&
                                     <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                                 }
                                 <Link to="/" className="btn btn-link">Go back</Link>
@@ -182,13 +195,12 @@ class ProductUpdate extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { /*users,*/ authentication } = state;
+    const { authentication } = state;
     const { user } = authentication;
     return {
         user,
-        //users
     };
 }
 
-const connectedProductUpdate = connect(mapStateToProps)(ProductUpdate);
-export { connectedProductUpdate as ProductUpdate };
+const connectedAddNewProduct = connect(mapStateToProps)(AddNewProduct);
+export { connectedAddNewProduct as AddNewProduct };

@@ -149,6 +149,7 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // POST: api/Product
+        // Allowed for logged in Admin users
         [AllowAnonymous] // Remover after setting up authentication
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
@@ -160,6 +161,7 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // PUT: api/Product/5
+        // Allowed for logged in users
         [AllowAnonymous] // Remover after setting up authentication
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(long id, Product product)
@@ -176,6 +178,7 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // DELETE: api/Product/5
+        // Allow for logged in Admin users
         [AllowAnonymous] // Remover after setting up authentication
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(long id)

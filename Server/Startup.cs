@@ -32,10 +32,14 @@ namespace Server
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
-            //services.AddDbContext<ProductContext>(opt => opt.UseInMemoryDatabase("DB"));
             services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("DB"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
+
+            //services.Configure<AppSettings>(options => {
+            //    options.Secret = Configuration.GetSection("Authentication:Secret").Value;
+            //});
+            //var key = Encoding.ASCII.GetBytes(services);
             
             // configure strongly typed settings objects
             var appAuthentication = Configuration.GetSection("Authentication");

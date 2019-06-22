@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { userActions } from '../_actions';
 import { config } from '../_config';
 
 class HomePage extends React.Component {
@@ -58,6 +57,7 @@ class HomePage extends React.Component {
         const { searchSuccess, searchResults } = this.state;
         return (
             <div className="container mt-4">
+                <h2>Search for products</h2>
                 <form name="form" onSubmit={this.handleSubmit}>
                     <div className="form-row justify-content-between align-items-end">
                         <div className="col-9">

@@ -9,7 +9,9 @@ import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
 import { RegisterPage } from '../RegisterPage';
 import { ProductUpdate } from '../ProductUpdate';
+import { AddNewProduct } from '../AddNewProduct';
 import { Users } from '../Users';
+import { Account } from '../Account';
 import { Snackbar } from '../Snackbar';
 
 class App extends React.Component {
@@ -37,11 +39,11 @@ class App extends React.Component {
                             <div className="col-sm">
                                 <Link to="/"><b>The Price Is Right</b></Link>
                             </div>
-                            {user && <div className="col-sm"><Link to="/add-new">Add new</Link></div>}
-                            {user && user.admin && <div className="col-sm"><Link to="/users">Users</Link></div>}
+                            {user && <div className="col-sm text-center"><Link to="/add-new">Add new</Link></div>}
+                            {user && user.admin && <div className="col-sm text-center"><Link to="/users">Users</Link></div>}
                             {/*user && <div class="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>*/}
                             {user ?
-                                (<div className="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>)
+                                (<div className="col-sm text-right"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>)
                                 :
                                 (<div className="col-sm text-right"><Link to="/login">Login</Link></div>)
                             }
@@ -57,9 +59,9 @@ class App extends React.Component {
                                         <Route path="/login" component={LoginPage} />
                                         <Route path="/register" component={RegisterPage} />
                                         <PrivateRoute path="/product-update" component={ProductUpdate} />
-                                        <PrivateRoute path="/add-new" component={HomePage} />
+                                        <PrivateRoute path="/add-new" component={AddNewProduct} />
                                         <PrivateRoute path="/users" component={Users} />
-                                        <PrivateRoute path="/account" component={HomePage} />
+                                        <PrivateRoute path="/account" component={Account} />
                                     </div>
                             </div>
                         </div>

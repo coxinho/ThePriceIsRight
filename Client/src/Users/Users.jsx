@@ -6,7 +6,11 @@ import { userActions } from '../_actions';
 
 class Users extends React.Component {
     componentDidMount() {
-        this.props.dispatch(userActions.getAll());
+        const { user } = this.props;
+        if(!user)
+            history.push('/login');
+        else
+            this.props.dispatch(userActions.getAll());
     }
 
     handleDeleteUser(id) {
@@ -16,8 +20,8 @@ class Users extends React.Component {
     render() {
         const { user, users } = this.props;
         return (
-            <div className="col-md-6 col-md-offset-3">
-                <h3>All registered users:</h3>
+            <div className="container mt-4">
+                <h2>All registered users:</h2>
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&
