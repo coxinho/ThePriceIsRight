@@ -102,7 +102,7 @@ namespace Server.Controllers
             }
         }
 
-        // POST: /users
+        // GET: /users
         [HttpGet]
         public IActionResult GetAll()
         {
