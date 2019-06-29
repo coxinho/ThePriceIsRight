@@ -1,15 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using AutoMapper;
-using Server.Services;
-using Server.Dtos;
-
 using System.Linq;
 using System.Threading.Tasks;
 using Server.Entities;
@@ -149,9 +140,8 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // POST: api/Product
-        // Allowed for logged in Admin users
-        [AllowAnonymous] // Remover after setting up authentication
         [HttpPost]
+        [Authorize(Policy = "AdminClaim")]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             _context.Products.Add(product);
@@ -161,8 +151,6 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // PUT: api/Product/5
-        // Allowed for logged in users
-        [AllowAnonymous] // Remover after setting up authentication
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProduct(long id, Product product)
         {
@@ -178,9 +166,8 @@ namespace ThePriceIsRightApi.Controllers
         }
 
         // DELETE: api/Product/5
-        // Allow for logged in Admin users
-        [AllowAnonymous] // Remover after setting up authentication
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminClaim")]
         public async Task<IActionResult> DeleteProduct(long id)
         {
             var Product = await _context.Products.FindAsync(id);

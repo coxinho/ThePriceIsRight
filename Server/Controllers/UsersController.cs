@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using AutoMapper;
 using Server.Helpers;
 using Server.Services;
@@ -32,6 +33,9 @@ namespace Server.Controllers
             _mapper = mapper;
             _appSettings = appSettings.Value;
 
+            //var exists = _context.Users.Where(x => x.Username == "cristinacoxinho") != null;
+            //if(exists)
+                //return;
             string password = "123456";
             byte[] passwordHash, passwordSalt;
             UserService.CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -56,14 +60,18 @@ namespace Server.Controllers
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.Name, user.Id.ToString())
+            };
+
+            if (user.Admin) {
+                claims.Add(new Claim("Admin", "true"));
+            }
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("thisisaverylongandawesomepassword" /*_appSettings.Secret*/);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[] 
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
+            var tokenDescriptor = new SecurityTokenDescriptor {
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -104,6 +112,7 @@ namespace Server.Controllers
 
         // GET: /users
         [HttpGet]
+        [Authorize(Policy = "AdminClaim")]
         public IActionResult GetAll()
         {
             var users =  _userService.GetAll();
@@ -113,6 +122,7 @@ namespace Server.Controllers
 
         // GET: /users/{id}
         [HttpGet("{id}")]
+        [Authorize(Policy = "AdminClaim")]
         public IActionResult GetById(int id)
         {
             var user =  _userService.GetById(id);
@@ -121,10 +131,12 @@ namespace Server.Controllers
         }
 
         // PUT: /users/{id}
-        [AllowAnonymous]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]UserDto userDto)
         {
+            if(!isCurrentUserOrAdmin(id))
+                return BadRequest(new { message = "Forbidden"});
+
             // map dto to entity and set id
             var user = _mapper.Map<User>(userDto);
             user.Id = id;
@@ -146,8 +158,17 @@ namespace Server.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
+             if(!isCurrentUserOrAdmin(id))
+                return BadRequest(new { message = "Forbidden"});
+
             _userService.Delete(id);
             return Ok();
+        }
+        
+        private bool isCurrentUserOrAdmin(int id) {
+            bool isAdmin = User.Claims.Where(x => x.Type.Equals("Admin") && x.Value.Equals("true")).FirstOrDefault() != null;
+            bool isCurrentUser = User.Identity.Name == id.ToString();
+            return isAdmin || isCurrentUser;
         }
     }
 }

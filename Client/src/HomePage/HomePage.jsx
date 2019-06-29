@@ -78,26 +78,37 @@ class HomePage extends React.Component {
                     {searchSuccess &&
                         searchResults.map((product, index) =>
                             <div className="col-3" key={index}>
-                                <div className="card mb-4" style={{width: 200 + 'px'}}>
-                                    {/*<img src="#" class="card-img-top" alt="Image alt text" />*/}
-                                    <div className="card-body">
-                                        <h5 className="card-title">{product.brand}</h5>
-                                        <p className="card-text">{product.name}</p>
-                                        <p className="card-text">{product.ean}</p>
-                                        <ul>
-                                            <li>Continente: {product.continente}€</li>
-                                            <li>Dia: {product.dia}€</li>
-                                            <li>Intermarche: {product.intermarche}€</li>
-                                            <li>Pingo-Doce: {product.pingoDoce}€</li>
-                                            <li>Jumbo: {product.jumbo}€</li>
-                                            <li>Lidl: {product.lidl}€</li>
-                                        </ul>
-                                        {user && <Link to={{
-                                            pathname: '/product-update',
-                                            state: {
-                                                product: product
-                                            }
-                                        }}  className="btn btn-primary">Update product</Link>}
+                                <div className="card-deck">
+                                    <div className="card mb-4" style={{width: 200 + 'px'}}>
+                                        <svg width="100%" height="80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#868e96"></rect></svg>
+                                        <div className="card-body">
+                                            <h5 className="card-title">{product.brand}</h5>
+                                            <p className="card-text">{product.name}</p>
+                                            <p className="card-text">{product.ean}</p>
+                                            <ul>
+                                                <li>Continente: {product.continente}€</li>
+                                                <li>Dia: {product.dia}€</li>
+                                                <li>Intermarche: {product.intermarche}€</li>
+                                                <li>Pingo-Doce: {product.pingoDoce}€</li>
+                                                <li>Jumbo: {product.jumbo}€</li>
+                                                <li>Lidl: {product.lidl}€</li>
+                                            </ul>
+                                            <div className="container">
+                                                <div className="row justify-content-between">
+                                                    <div className="col-6">
+                                                        {user && <Link to={{
+                                                            pathname: '/product-update',
+                                                            state: {
+                                                                product: product
+                                                            }
+                                                        }}  className="btn btn-primary">Update</Link>}
+                                                    </div>
+                                                    <div className="col-6">
+                                                        {user && user.admin && <button className="btn btn-primary">Delete</button>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

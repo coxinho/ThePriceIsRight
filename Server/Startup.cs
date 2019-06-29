@@ -36,6 +36,11 @@ namespace Server
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
 
+            services.AddAuthorization(options =>  
+            {  
+                options.AddPolicy("AdminClaim", policy => policy.RequireClaim("Admin", "true"));  
+            });
+
             //services.Configure<AppSettings>(options => {
             //    options.Secret = Configuration.GetSection("Authentication:Secret").Value;
             //});

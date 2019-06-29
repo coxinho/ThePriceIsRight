@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { config } from '../_config';
+import { authHeader } from '../_helpers/auth-header';
 
 class ProductUpdate extends React.Component {
     constructor(props) {
@@ -42,9 +43,15 @@ class ProductUpdate extends React.Component {
             this.setState({ updating: true });
 
             // Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
+            const headers = {
+                headers: {
+                    ...authHeader(),
+                    "Content-Type": "application/json",
+                },
+            };
             const url = `${config.baseURL}:${config.apiPort}/api/product/${product.id}`;
             axios
-            .put(url, JSON.stringify(product), {headers: {"Content-Type": "application/json"}})
+            .put(url, JSON.stringify(product), headers)
             .then((response) => {
                 console.log(response);
                 this.setState({updated: true, updating: false});
