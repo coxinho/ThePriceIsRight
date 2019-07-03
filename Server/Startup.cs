@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Server.Helpers;
 using Server.Services;
+using Microsoft.Extensions.Options;
 
 namespace Server
 {
@@ -32,7 +33,14 @@ namespace Server
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
-            services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("DB"));
+            //services.AddDbContext<DataContext>(x => x.UseInMemoryDatabase("DB"));
+            services.Configure<MongoDB>(
+                Configuration.GetSection(nameof(MongoDB))
+            );
+
+            services.AddSingleton<IMongoDB>(sp =>
+                sp.GetRequiredService<IOptions<MongoDB>>().Value
+            );
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddAutoMapper();
 

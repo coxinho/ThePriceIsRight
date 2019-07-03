@@ -37,7 +37,9 @@ namespace Server.Services
                 return null;
 
             // check if password is correct
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            byte[] passwordHashBytes = Convert.FromBase64String(user.PasswordHash);
+            byte[] passwordSaltBytes = Convert.FromBase64String(user.PasswordSalt);
+            if (!VerifyPasswordHash(password, passwordHashBytes, passwordSaltBytes))
                 return null;
 
             // authentication successful
@@ -66,8 +68,11 @@ namespace Server.Services
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            string passwordHashString = Convert.ToBase64String(passwordHash);
+            string passwordSaltString = Convert.ToBase64String(passwordSalt);
+
+            user.PasswordHash = passwordHashString;
+            user.PasswordSalt = passwordSaltString;
             user.Admin = false;
 
             _context.Users.Add(user);
@@ -100,9 +105,11 @@ namespace Server.Services
             {
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(password, out passwordHash, out passwordSalt);
+                string passwordHashString = Convert.ToBase64String(passwordHash);
+                string passwordSaltString = Convert.ToBase64String(passwordSalt);
 
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
+                user.PasswordHash = passwordHashString;
+                user.PasswordSalt = passwordSaltString;
             }
 
             _context.Users.Update(user);

@@ -39,12 +39,15 @@ namespace Server.Controllers
             string password = "123456";
             byte[] passwordHash, passwordSalt;
             UserService.CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            string passwordHashString = Convert.ToBase64String(passwordHash);
+            string passwordSaltString = Convert.ToBase64String(passwordSalt);
+            
             _context.Users.Add(new User {
                     FirstName = "Cristina",
                     LastName = "Coxinho",
                     Username = "cristinacoxinho",
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt,
+                    PasswordHash = passwordHashString,
+                    PasswordSalt = passwordSaltString,
                     Admin = true
             });
             _context.SaveChanges();
