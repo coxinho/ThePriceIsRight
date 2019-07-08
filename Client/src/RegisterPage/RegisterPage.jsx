@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { Link } from 'react-router-dom';
 import { userActions } from '../_actions';
+
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -39,8 +39,9 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
+        // Se estiver tudo bem com os campos de registo
         if (user.firstName && user.lastName && user.username && user.password) {
-            dispatch(userActions.register(user));
+            dispatch(userActions.register(user)); // Guardar utilizador na base de dados
         }
     }
 
@@ -101,3 +102,4 @@ function mapStateToProps(state) {
 
 const connectedRegisterPage = connect(mapStateToProps)(RegisterPage);
 export { connectedRegisterPage as RegisterPage };
+

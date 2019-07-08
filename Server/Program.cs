@@ -13,7 +13,7 @@ namespace Server
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("https://localhost:5001")
+                .UseUrls("https://localhost:5001") // Podemos aceder aos ficheiros que estão em /wwwroot/ neste endereço
                 .Build();
     }
 }

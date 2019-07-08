@@ -14,67 +14,40 @@ using Server.Services;
 using Server.Dtos;
 using Server.Entities;
 
-namespace Server.Controllers
-{
+namespace Server.Controllers {
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class UsersController : ControllerBase
-    {
-        private readonly DataContext _context;
-        private IUserService _userService;
+    public class UsersController : ControllerBase {
+        private IUserServiceMongo _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
-        public UsersController(IUserService userService, IMapper mapper, IOptions<AppSettings> appSettings, DataContext context)
-        {
-            _context = context;
+        public UsersController(IUserServiceMongo userService, IMapper mapper, IOptions<AppSettings> appSettings) {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
-
-            //var exists = _context.Users.Where(x => x.Username == "cristinacoxinho") != null;
-            //if(exists)
-                //return;
-            string password = "123456";
-            byte[] passwordHash, passwordSalt;
-            UserService.CreatePasswordHash(password, out passwordHash, out passwordSalt);
-            string passwordHashString = Convert.ToBase64String(passwordHash);
-            string passwordSaltString = Convert.ToBase64String(passwordSalt);
-            
-            _context.Users.Add(new User {
-                    FirstName = "Cristina",
-                    LastName = "Coxinho",
-                    Username = "cristinacoxinho",
-                    PasswordHash = passwordHashString,
-                    PasswordSalt = passwordSaltString,
-                    Admin = true
-            });
-            _context.SaveChanges();
         }
 
         // POST: /users/authenticate
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]UserDto userDto)
-        {
+        public IActionResult Authenticate([FromBody]UserDto userDto) {
+            // Vamos autênticar um utilizador na base de dados
             var user = _userService.Authenticate(userDto.Username, userDto.Password);
 
-            if (user == null)
+            if (user == null) // Se não tivermos encontrado um utilizador, enviar essa mensagem para o cliente.
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            var claims = new List<Claim> {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
-            };
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Id) };
 
-            if (user.Admin) {
+            if (user.Admin) // Se o utilizador for Admin, vamos adicionar essa Claim à lista de Claims
                 claims.Add(new Claim("Admin", "true"));
-            }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("thisisaverylongandawesomepassword" /*_appSettings.Secret*/);
             var tokenDescriptor = new SecurityTokenDescriptor {
-                Subject = new ClaimsIdentity(claims),
+                Subject = new ClaimsIdentity(claims), // Associamos a lista de Claims ao JSON Web Token
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -95,19 +68,15 @@ namespace Server.Controllers
         // POST: /users/register
         [AllowAnonymous]
         [HttpPost("register")]
-        public IActionResult Register([FromBody]UserDto userDto)
-        {
-            // map dto to entity
+        public IActionResult Register([FromBody]UserDto userDto) {
+            // Mapear data object à entidade user
             var user = _mapper.Map<User>(userDto);
 
-            try 
-            {
-                // save 
+            try {
+                // Registar este utilizador
                 _userService.Create(user, userDto.Password);
                 return Ok();
-            } 
-            catch(AppException ex)
-            {
+            } catch(AppException ex) {
                 // return error message if there was an exception
                 return BadRequest(new { message = ex.Message });
             }
@@ -116,61 +85,53 @@ namespace Server.Controllers
         // GET: /users
         [HttpGet]
         [Authorize(Policy = "AdminClaim")]
-        public IActionResult GetAll()
-        {
-            var users =  _userService.GetAll();
-            var userDtos = _mapper.Map<IList<UserDto>>(users);
-            return Ok(userDtos);
+        public IActionResult GetAll() {
+            var users =  _userService.GetAll(); // Obter todos os utilizadores
+            var userDtos = _mapper.Map<IList<UserDto>>(users); // Mapear utilizadores com o respectivo data object
+            return Ok(userDtos); // Enviar utilizadores para o cliente
         }
 
         // GET: /users/{id}
         [HttpGet("{id}")]
         [Authorize(Policy = "AdminClaim")]
-        public IActionResult GetById(int id)
-        {
-            var user =  _userService.GetById(id);
-            var userDto = _mapper.Map<UserDto>(user);
-            return Ok(userDto);
+        public IActionResult GetById(string id) {
+            var user =  _userService.GetById(id); // Obter utilizador por id
+            var userDto = _mapper.Map<UserDto>(user); // Mapear utilizador ao seu Data Object
+            return Ok(userDto); // Enviar para o cliente
         }
 
         // PUT: /users/{id}
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody]UserDto userDto)
-        {
-            if(!isCurrentUserOrAdmin(id))
-                return BadRequest(new { message = "Forbidden"});
+        public IActionResult Update(string id, [FromBody]UserDto userDto) {
+            if(!isCurrentUserOrAdmin(id)) // Se não for o próprio utilizador ou um Admin
+                return BadRequest(new { message = "Forbidden"}); // Enviar 'forbidden'
 
-            // map dto to entity and set id
-            var user = _mapper.Map<User>(userDto);
+            var user = _mapper.Map<User>(userDto); // Mapear data object ao utilizador e colocar o seu id
             user.Id = id;
 
-            try 
-            {
-                // save 
-                _userService.Update(user, userDto.Password);
-                return Ok();
-            } 
-            catch(AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
+            try { 
+                _userService.Update(user, userDto.Password); // Actualizar utilizador
+                return Ok(); // Enviar 'OK' para o cliente
+            } catch(AppException ex) {
+                return BadRequest(new { message = ex.Message }); // Retorna mensagem de erro se houver uma excepção
             }
         }
 
         // DEL: /users/{id}
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-             if(!isCurrentUserOrAdmin(id))
-                return BadRequest(new { message = "Forbidden"});
+        public IActionResult Delete(string id) {
+            if(!isCurrentUserOrAdmin(id)) // Se não for o próprio utilizador ou um Admin
+                return BadRequest(new { message = "Forbidden"}); // Enviar 'forbidden'
 
-            _userService.Delete(id);
+            _userService.Delete(id); // Apagar utilizador por id
             return Ok();
         }
         
-        private bool isCurrentUserOrAdmin(int id) {
+        private bool isCurrentUserOrAdmin(string id) {
+            // isAdmin é verdadeiro se o utilizador actual for Administrador
             bool isAdmin = User.Claims.Where(x => x.Type.Equals("Admin") && x.Value.Equals("true")).FirstOrDefault() != null;
-            bool isCurrentUser = User.Identity.Name == id.ToString();
+            // isCurrentUser é verdadeiro se o utilizador actual tiver o id que vem no argumento
+            bool isCurrentUser = User.Identity.Name == id;
             return isAdmin || isCurrentUser;
         }
     }

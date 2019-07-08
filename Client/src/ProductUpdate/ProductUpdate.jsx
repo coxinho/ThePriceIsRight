@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import axios from 'axios';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { config } from '../_config';
 import { authHeader } from '../_helpers/auth-header';
 
@@ -21,10 +21,12 @@ class ProductUpdate extends React.Component {
     }
 
     componentDidMount () {
+        // Assim que o componente for montado, colocar o producto que vem do estado nas propriedades
         const { product } = this.props.location.state;
         this.setState({ product });
     }
     
+    // Esta função guarda as propriedades do producto que forem alteradas, no estado do componente
     handleChange(e) {
         const { name, value } = e.target;
         let { product } = this.state;
@@ -33,16 +35,16 @@ class ProductUpdate extends React.Component {
     }
     
     handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); // Impedir que o formulário se submeta para o servidor, já que queremos fazer uma chamada à sua API
 
         this.setState({ submitted: true });
 
+        // Validar producto
         const { product } = this.state;
-
 		if (product.brand && product.name && product.ean && product.continente && product.dia && product.intermarche && product.pingoDoce && product.jumbo && product.lidl) {
             this.setState({ updating: true });
 
-            // Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
+            // Pedir ao servidor para actualizar o producto com este id na base de dados
             const headers = {
                 headers: {
                     ...authHeader(),
@@ -53,12 +55,10 @@ class ProductUpdate extends React.Component {
             axios
             .put(url, JSON.stringify(product), headers)
             .then((response) => {
-                console.log(response);
                 this.setState({updated: true, updating: false});
             })
             .catch((error) => {
                 console.log(error);
-                //this.props.snackbarMessage(error);
             });
 		}
 	}
@@ -92,11 +92,7 @@ class ProductUpdate extends React.Component {
                                 }
                             </div>
                             <div className={'form-group' + (submitted && !ean ? ' has-error' : '')}>
-                                <label htmlFor="ean">EAN</label>
-                                <input type="text" className="form-control" name="ean" value={ean} onChange={this.handleChange} required />
-                                {submitted && !ean &&
-                                    <div className="help-block">EAN is required</div>
-                                }
+                                <label htmlFor="ean">{`EAN: ${ean}`}</label>
                             </div>
                             <div className="form-group">
                                 <button className="btn btn-primary">Update</button>
@@ -189,13 +185,13 @@ class ProductUpdate extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { /*users,*/ authentication } = state;
+    const { authentication } = state;
     const { user } = authentication;
     return {
         user,
-        //users
     };
 }
 
 const connectedProductUpdate = connect(mapStateToProps)(ProductUpdate);
 export { connectedProductUpdate as ProductUpdate };
+

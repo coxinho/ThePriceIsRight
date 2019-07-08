@@ -1,24 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import { userActions } from '../_actions';
+
 
 class Users extends React.Component {
     componentDidMount() {
         const { user } = this.props;
+
+        // Se não houver um utilizador, enviá-lo para o login
         if(!user)
             history.push('/login');
-        else
+        else // Caso contrário, obter todos os utilizadores registados
             this.props.dispatch(userActions.getAll());
     }
 
     handleDeleteUser(id) {
-        return (e) => this.props.dispatch(userActions.delete(id));
+        return () => this.props.dispatch(userActions.delete(id)); // Apagar utilizador
     }
 
     render() {
-        const { user, users } = this.props;
+        const { users } = this.props;
         return (
             <div className="container mt-4">
                 <h2>All registered users:</h2>
@@ -54,3 +55,4 @@ function mapStateToProps(state) {
 
 const connectedUsers = connect(mapStateToProps)(Users);
 export { connectedUsers as Users };
+

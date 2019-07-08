@@ -1,18 +1,17 @@
 import React from 'react';
-import { Router, Route, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import { history } from '../_helpers';
-import { alertActions } from '../_actions';
-import { PrivateRoute } from '../_components';
+import { Link, Route, Router } from 'react-router-dom';
+import { Account } from '../Account';
+import { AddNewProduct } from '../AddNewProduct';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
-import { RegisterPage } from '../RegisterPage';
 import { ProductUpdate } from '../ProductUpdate';
-import { AddNewProduct } from '../AddNewProduct';
+import { RegisterPage } from '../RegisterPage';
 import { Users } from '../Users';
-import { Account } from '../Account';
-import { Snackbar } from '../Snackbar';
+import { alertActions } from '../_actions';
+import { PrivateRoute } from '../_components';
+import { history } from '../_helpers';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -22,15 +21,15 @@ class App extends React.Component {
             time: null
         };
 
+        // Limpar alertas quando se muda de localização
         const { dispatch } = this.props;
         history.listen((location, action) => {
-            // clear alert on location change
             dispatch(alertActions.clear());
         });
     }
 
     render() {
-        const { alert, user, snackbarMessage } = this.props;
+        const { alert, user } = this.props;
         return (
             <div className="jumbotron">
                 <Router history={history}>
@@ -50,9 +49,7 @@ class App extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm">
-                                {alert.message &&
-                                    <div className={`alert ${alert.type}`}>{alert.message}</div>
-                                }
+                                {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div> }
                                 
                                     <div>
                                         <Route exact path="/" component={HomePage} />
@@ -67,19 +64,8 @@ class App extends React.Component {
                         </div>
                     </div>
                 </Router>
-                {/*<Snackbar message={snackbarMessage} />*/}
             </div>
         );
-    }
-
-    snackbarMessage(msg) {
-        this.setState({ snackbarMessage: msg });
-		clearTimeout(this.state.time);
-		this.setState({
-			time: setTimeout(() => {
-				this.setState({ snackbarMessage: '' });
-			}, 4000)
-		});
     }
 }
 
@@ -93,4 +79,5 @@ function mapStateToProps(state) {
 }
 
 const connectedApp = connect(mapStateToProps)(App);
-export { connectedApp as App }; 
+export { connectedApp as App };
+

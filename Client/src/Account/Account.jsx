@@ -1,8 +1,9 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import axios from 'axios';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { config } from '../_config';
+import { authHeader } from '../_helpers/auth-header';
 
 class Account extends React.Component {
     constructor(props) {
@@ -17,6 +18,8 @@ class Account extends React.Component {
             submitted: false,
             updating: false,
             updated: false,
+            error: false,
+            errorMessage: '',
         };
 
         this.componentDidMount = this.componentDidMount.bind(this);
@@ -25,13 +28,15 @@ class Account extends React.Component {
     }
 
     componentDidMount() {
+        // Assim que o componente se monta, validar utilizador
         const { user } = this.props;
-        if(!user)
-            history.push('/login');
+        if(!user) // Se não existir um utilizador
+            history.push('/login'); // Enviá-lo para o login
         else
-            this.setState({ user });
+            this.setState({ user }); // Caso contrário, registar este utilizador no estado do componente
     }
     
+    // Gravar propriedades do utilizador no estado do componente
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
@@ -40,12 +45,12 @@ class Account extends React.Component {
     }
     
     handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); // Impedir que o formulário seja submetido para o servidor, já que queremos fazer uma chamada à sua API
 
         this.setState({ submitted: true });
         
         let { user } = this.state;
-
+        // Validar password, firstname, lastname e username
         const password = document.getElementById("password").value;
         if(password)
             user["password"] = password;
@@ -53,26 +58,32 @@ class Account extends React.Component {
 		if (user.firstName && user.lastName && user.username) {
             this.setState({ updating: true });
 
-            // Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
+            // Pedir ao servidor actualizar este utilizador
+            const headers = {
+                headers: {
+                    ...authHeader(),
+                    "Content-Type": "application/json",
+                },
+            };
             const url = `${config.baseURL}:${config.apiPort}/users/${user.id}`;
             axios
-            .put(url, JSON.stringify(user), {headers: {"Content-Type": "application/json"}})
-            .then((response) => {
-                this.setState({updated: true, updating: false});
+            .put(url, JSON.stringify(user), headers)
+            .then(() => {
+                this.setState({error: false, updated: true, updating: false});
             })
             .catch((error) => {
-                //this.props.snackbarMessage(error);
+                this.setState({error: true, errorMessage: error.toString()});
             });
 		}
 	}
 
     render() {
-        const { submitted, updating, updated } = this.state;
-        const { user } = this.state;
+        const { submitted, updating, updated, user, error, errorMessage } = this.state;
         const { firstName, lastName, username } = user;
         return (
             <div className="container mt-4">
                 <h2>Edit your account</h2>
+                {error && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
                 {updated && 
                 <div className="alert alert-success" role="alert">
                     Your account was successfuly updated!
@@ -129,3 +140,4 @@ function mapStateToProps(state) {
 
 const connectedAccount = connect(mapStateToProps)(Account);
 export { connectedAccount as Account };
+

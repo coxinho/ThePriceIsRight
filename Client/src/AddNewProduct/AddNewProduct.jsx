@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import axios from 'axios';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { config } from '../_config';
 import { authHeader } from '../_helpers/auth-header';
 
@@ -32,26 +32,27 @@ class AddNewProduct extends React.Component {
     }
 
     componentDidMount() {
+        // Assim que o componente monta, validar o utilizador
         const { user } = this.props;
-        if(!user)
-            history.push('/login');
+        if(!user) // Se não houver um utilizador logado
+            history.push('/login'); // Redirecioná-lo para o login
     }
     
+    // Gravar propriedades do producto no estado do componente
     handleChange(e) {
         const { name, value } = e.target;
         let { product } = this.state;
         product[name] = value;
-        this.setState({ product });
+        this.setState({ product, created: false });
     }
     
     handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); // Impedir que o formulário seja submetido para o servidor, já que queremos fazer uma chamada à sua API
 
         this.setState({ submitted: true });
 
-        // Get search term
-        let { product } = this.state;
-
+        // Validar producto
+        const { product } = this.state;
 		if (product.brand && product.name && product.ean && product.continente && product.dia && product.intermarche && product.pingoDoce && product.jumbo && product.lidl) {
             this.setState({ creating: true });
 
@@ -65,24 +66,23 @@ class AddNewProduct extends React.Component {
             const url = `${config.baseURL}:${config.apiPort}/api/product/`;
             axios
             .post(url, JSON.stringify(product), headers)
-            .then((response) => {
-                console.log(response);
-                this.setState({created: true, creating: false});
+            .then(() => {
+                this.setState({error: false, created: true, creating: false});
             })
             .catch((error) => {
                 console.log(error);
-                //this.props.snackbarMessage(error);
+                this.setState({error: true, errorMessage: error.message});
             });
 		}
 	}
 
     render() {
-        const { submitted, creating, created } = this.state;
-        const { product } = this.state;
+        const { submitted, creating, created, product, error, errorMessage } = this.state;
         const { brand, name, ean, continente, dia, intermarche, pingoDoce, jumbo, lidl } = product;
         return (
             <div className="container mt-4">
                 <h2>Add New Product</h2>
+                {error && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
                 {created && 
                 <div className="alert alert-success" role="alert">
                     The product was successfuly created!
@@ -211,3 +211,4 @@ function mapStateToProps(state) {
 
 const connectedAddNewProduct = connect(mapStateToProps)(AddNewProduct);
 export { connectedAddNewProduct as AddNewProduct };
+

@@ -1,7 +1,7 @@
 import { userConstants } from '../_constants';
+import { history } from '../_helpers';
 import { userService } from '../_services';
 import { alertActions } from './';
-import { history } from '../_helpers';
 
 export const userActions = {
     login,
@@ -17,8 +17,7 @@ function login(username, password) {
 
         userService.login(username, password)
             .then(
-                user => { 
-                    console.log(user);
+                user => {
                     dispatch(success(user));
                     history.push('/');
                 },
@@ -78,7 +77,7 @@ function getAll() {
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }
 
-// prefixed function name with underscore because delete is a reserved word in javascript
+// Prefixei a função com _ (underscore) porque delete é uma palavra reservada em JavaScript
 function _delete(id) {
     return dispatch => {
         dispatch(request(id));
