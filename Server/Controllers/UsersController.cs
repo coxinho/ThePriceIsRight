@@ -33,28 +33,28 @@ namespace Server.Controllers {
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto) {
-            // Vamos autênticar um utilizador na base de dados
+            // Autenticar um utilizador na base de dados
             var user = _userService.Authenticate(userDto.Username, userDto.Password);
 
-            if (user == null) // Se não tivermos encontrado um utilizador, enviar essa mensagem para o cliente.
+            if (user == null) // Se não estiver encontrado um utilizador, envia-se essa mensagem para o cliente.
                 return BadRequest(new { message = "Username or password is incorrect" });
 
             var claims = new List<Claim> { new Claim(ClaimTypes.Name, user.Id) };
 
-            if (user.Admin) // Se o utilizador for Admin, vamos adicionar essa Claim à lista de Claims
+            if (user.Admin) // Se o utilizador for Admin, vou adicionar essa Claim à lista de Claims
                 claims.Add(new Claim("Admin", "true"));
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("thisisaverylongandawesomepassword" /*_appSettings.Secret*/);
             var tokenDescriptor = new SecurityTokenDescriptor {
-                Subject = new ClaimsIdentity(claims), // Associamos a lista de Claims ao JSON Web Token
+                Subject = new ClaimsIdentity(claims), // Associar a lista de Claims ao JSON Web Token
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // return basic user info (without password) and token to store client side
+            // return informações básicas do usuário (sem password) e token para armazenar o lado do cliente
             return Ok(new {
                 Id = user.Id,
                 Username = user.Username,
@@ -77,7 +77,7 @@ namespace Server.Controllers {
                 _userService.Create(user, userDto.Password);
                 return Ok();
             } catch(AppException ex) {
-                // return error message if there was an exception
+                // return error message se houve uma exceção
                 return BadRequest(new { message = ex.Message });
             }
         }
