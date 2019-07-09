@@ -21,9 +21,9 @@ namespace Server.Services {
         private readonly IMongoCollection<User> _users; // _users é uma colecção com interface IMongoCollection do tipo classe User
 
         public UserServiceMongo(IMongoDB settings) {
-            var client = new MongoClient("mongodb://localhost:27017"/*settings.ConnectionString */); // Ligamo-nos ao servidor
-            var database = client.GetDatabase("ThePriceIsRightDatabase"/*settings.Database*/); // Peço para usar a base de dados "ThePriceIsRightDatabase"
-            _users = database.GetCollection<User>("users"/*settings.UsersCollectionName */); // Peço para aceder à coleção "users"
+            var server = new MongoClient("mongodb://localhost:27017"); // Ligamo-nos ao servidor
+            var database = server.GetDatabase("ThePriceIsRightDatabase"); // Peço para usar a base de dados "ThePriceIsRightDatabase"
+            _users = database.GetCollection<User>("users"); // Peço para aceder à coleção "users"
         }
 
         public User Authenticate(string username, string password) {
@@ -114,7 +114,7 @@ namespace Server.Services {
             }
         }
 
-        // Métodos ajudantes privados
+        // Métodos auxiliares privados
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt) {
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");

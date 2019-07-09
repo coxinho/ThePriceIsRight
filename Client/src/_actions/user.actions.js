@@ -19,7 +19,7 @@ function login(username, password) {
             .then(
                 user => {
                     dispatch(success(user));
-                    history.push('/');
+                    history.push('/'); // Redirecionar utilizador para a página de entrada (Homepage)
                 },
                 error => {
                     dispatch(failure(error.toString()));

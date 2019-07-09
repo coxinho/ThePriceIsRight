@@ -83,11 +83,13 @@ class Account extends React.Component {
         return (
             <div className="container mt-4">
                 <h2>Edit your account</h2>
+
                 {error && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
                 {updated && 
                 <div className="alert alert-success" role="alert">
                     Your account was successfuly updated!
                 </div>}
+                
                 <form name="form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                     <div className={'form-group' + (submitted && !firstName ? ' has-error' : '')}>
                         <label htmlFor="firstName">First Name</label>

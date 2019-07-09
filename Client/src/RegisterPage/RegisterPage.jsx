@@ -34,9 +34,10 @@ class RegisterPage extends React.Component {
     }
 
     handleSubmit(event) {
-        event.preventDefault();
+        event.preventDefault(); // Impedir que o formulário seja submetido para o servidor, já que queremos aceder à API
 
-        this.setState({ submitted: true });
+        this.setState({ submitted: true }); // Apresentar validação no formulário
+
         const { user } = this.state;
         const { dispatch } = this.props;
         // Se estiver tudo bem com os campos de registo

@@ -18,9 +18,9 @@ namespace Server.Services {
         private readonly IMongoCollection<Product> _products;
 
         public ProductServiceMongo(IMongoDB settings) {
-            var client = new MongoClient("mongodb://localhost:27017"/*settings.ConnectionString */);
-            var database = client.GetDatabase("ThePriceIsRightDatabase"/*settings.Database*/);
-            _products = database.GetCollection<Product>("products"/*settings.UsersCollectionName */); // Coleção à qual podemos fazer pedidos de dados
+            var server = new MongoClient("mongodb://localhost:27017");
+            var database = server.GetDatabase("ThePriceIsRightDatabase");
+            _products = database.GetCollection<Product>("products"); // Coleção à qual podemos fazer pedidos de dados
         }
 
         public Product Create(Product product) {

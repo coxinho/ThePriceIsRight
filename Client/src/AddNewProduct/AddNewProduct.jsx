@@ -70,7 +70,6 @@ class AddNewProduct extends React.Component {
                 this.setState({error: false, created: true, creating: false});
             })
             .catch((error) => {
-                console.log(error);
                 this.setState({error: true, errorMessage: error.response.data.message});
             });
 		}
@@ -82,11 +81,13 @@ class AddNewProduct extends React.Component {
         return (
             <div className="container mt-4">
                 <h2>Add New Product</h2>
+
                 {error && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
                 {created && 
                 <div className="alert alert-success" role="alert">
                     The product was successfuly created!
                 </div>}
+
                 <form name="form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                     <div className="form-row justify-content-between align-items-start">
                         <div className="col-6">

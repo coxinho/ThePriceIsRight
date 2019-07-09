@@ -31,7 +31,7 @@ class ProductUpdate extends React.Component {
         const { name, value } = e.target;
         let { product } = this.state;
         product[name] = value;
-        this.setState({ product });
+        this.setState({ product, updated: false });
     }
     
     handleSubmit(e) {
@@ -70,10 +70,12 @@ class ProductUpdate extends React.Component {
         return (
             <div className="container mt-4">
                 <h2>Update product</h2>
+
                 {updated && 
                 <div className="alert alert-success" role="alert">
                     The product was successfuly updated!
                 </div>}
+
                 <form name="form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                     <div className="form-row justify-content-between align-items-start">
                         <div className="col-6">

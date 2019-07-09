@@ -27,9 +27,10 @@ class LoginPage extends React.Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();
+        e.preventDefault(); // Impedir que o fomrulário seja submetido para o servidor, já que queremos chamar a API
 
         this.setState({ submitted: true });
+        
         const { username, password } = this.state;
         const { dispatch } = this.props;
         if (username && password) {
