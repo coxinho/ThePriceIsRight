@@ -144,6 +144,13 @@ class HomePage extends React.Component {
                         )
                     }
                 </div>
+                <div className="row">
+                    <div className="col-12">
+                        <p>Engenharia Informática, Tecnologias da Internet 2, 2018/2019, Cristina Coxinho, nº8811</p>
+                        <p>Cliente: React, Redux, Bootstrap, Axios</p>
+                        <p>Servidor: .Net Core Web API, JWT, MongoDB</p>
+                    </div>
+                </div>
             </div>
         );
     }

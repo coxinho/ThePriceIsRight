@@ -71,7 +71,7 @@ class AddNewProduct extends React.Component {
             })
             .catch((error) => {
                 console.log(error);
-                this.setState({error: true, errorMessage: error.message});
+                this.setState({error: true, errorMessage: error.response.data.message});
             });
 		}
 	}

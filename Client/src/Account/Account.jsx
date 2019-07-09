@@ -72,7 +72,7 @@ class Account extends React.Component {
                 this.setState({error: false, updated: true, updating: false});
             })
             .catch((error) => {
-                this.setState({error: true, errorMessage: error.toString()});
+                this.setState({error: true, errorMessage: error.response.data.message});
             });
 		}
 	}
