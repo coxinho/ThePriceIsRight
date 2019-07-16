@@ -129,7 +129,7 @@ namespace Server.Controllers {
         
         private bool isCurrentUserOrAdmin(string id) {
             // isAdmin é verdadeiro se o utilizador actual for Administrador
-            bool isAdmin = User.Claims.Where(x => x.Type.Equals("Admin") && x.Value.Equals("true")).FirstOrDefault() != null;
+            bool isAdmin = User.Claims.Where(claim => claim.Type.Equals("Admin") && claim.Value.Equals("true")).FirstOrDefault() != null;
             // isCurrentUser é verdadeiro se o utilizador actual tiver o id que vem no argumento
             bool isCurrentUser = User.Identity.Name == id;
             return isAdmin || isCurrentUser;
