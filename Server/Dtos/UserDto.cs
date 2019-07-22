@@ -1,11 +1,11 @@
 namespace Server.Dtos {
-    // Esta é a classe usada para comunicar com o cliente
+    // Class used to communicate with the client (passwordHash and passwordSalt have been removed)
     public class UserDto {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public bool Admin { get; set; }
+        public string id { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public bool admin { get; set; }
     }
 }

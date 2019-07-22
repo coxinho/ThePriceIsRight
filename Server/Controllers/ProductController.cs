@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Server.Entities;
+using Server.Models;
 using Server.Services;
 using Server.Helpers;
 
@@ -10,27 +10,26 @@ namespace ThePriceIsRightApi.Controllers {
     [Authorize]
     [ApiController]
     public class ProductController : ControllerBase {
-        private IProductServiceMongo _productService;
+        private IProductService _productService;
 
-        public ProductController(IProductServiceMongo productService) {
+        public ProductController(IProductService productService) {
             _productService = productService;
         }
 
         // POST: api/Product
         [HttpPost]
-        [Authorize(Policy = "AdminClaim")] // Só administradores é que podem criar productos
         public IActionResult Create(Product product) {
             try {
-                _productService.Create(product); // Criar novo producto na base de dados
+                _productService.Create(product);
                 return Ok();
             } catch(AppException ex) {
-                return BadRequest(new { message = ex.Message }); // Retornar mensagem de erro se ocorreu uma excepção
+                return BadRequest(new { message = ex.Message });
             }
         }
         
         // GET: api/Product
         // GET: api/Product?search=Nestle
-        [AllowAnonymous] // Qualquer utilizador, mesmo que não esteja logado, pode ver os productos disponíveis
+        [AllowAnonymous]
         [HttpGet]
         public JsonResult GetProducts(string search) => new JsonResult(_productService.GetProducts(search).ToArray());
 
@@ -41,8 +40,8 @@ namespace ThePriceIsRightApi.Controllers {
 
         // PUT: api/Product/5
         [HttpPut("{id}")]
-        public void Update(string id, Product product) { // É necessário um utilizador estar logado para poder actualizar um producto
-            if(id == product.Id) // Validar ids
+        public void Update(string ean, Product product) { // É necessário um utilizador estar logado para poder actualizar um producto
+            if(ean == product.ean) // Validar ids
                 _productService.Update(product); // Actualizar producto na base de dados
         }
 

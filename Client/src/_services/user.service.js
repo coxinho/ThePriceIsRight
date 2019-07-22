@@ -18,7 +18,7 @@ function login(username, password) {
         body: JSON.stringify({ username, password })
     };
 
-    return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
+    return fetch(`${config.apiUrl}/users/login`, requestOptions)
         .then(handleResponse)
         .then(user => {
             // Gravar detalhes do utilizador e o JWToken no local storage para manter o utilizador logado entre recarregamentos da página

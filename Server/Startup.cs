@@ -11,14 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Server.Helpers;
 using Server.Services;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 
 namespace Server {
     public class Startup {
-        public Startup(IConfiguration configuration) {
-            Configuration = configuration;
-        }
+        private IConfiguration _config;
+        private IHostingEnvironment _env;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration config, IHostingEnvironment env) {
+            _config = config;
+            _env = env;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
@@ -32,7 +35,7 @@ namespace Server {
 
             // Obter a secção "MongoDB" do ficheiro appsettings.json
             services.Configure<MongoDB>(
-                Configuration.GetSection(nameof(MongoDB))
+                _config.GetSection(nameof(MongoDB))
             );
             services.AddSingleton<IMongoDB>(sp =>
                 sp.GetRequiredService<IOptions<MongoDB>>().Value
@@ -46,14 +49,9 @@ namespace Server {
             services.AddAuthorization(options => {  
                 options.AddPolicy("AdminClaim", policy => policy.RequireClaim("Admin", "true"));  
             });
-            
-            // Configure strongly typed settings objects
-            var appAuthentication = Configuration.GetSection("Authentication");
-            services.Configure<AppSettings>(appAuthentication);
 
             // Configure jwt authentication
-            var appSettings = appAuthentication.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes("thisisaverylongandawesomepassword" /*appSettings.Secret*/);
+            var key = Encoding.ASCII.GetBytes(_config.GetSection("Authentication").GetSection("Secret").Value);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,7 +63,7 @@ namespace Server {
                 {
                     OnTokenValidated = context =>
                     {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserServiceMongo>();
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                         var userId = context.Principal.Identity.Name;
                         var user = userService.GetById(userId);
                         if (user == null)
@@ -85,18 +83,21 @@ namespace Server {
             });
 
             // Configure Dependency Injection (DI) for application services
-            services.AddScoped<IUserServiceMongo, UserServiceMongo>();
-            services.AddScoped<IProductServiceMongo, ProductServiceMongo>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
-            if (env.IsDevelopment())
-                app.UseDeveloperExceptionPage();
-            else
+        public void Configure(IApplicationBuilder app) {
+            if (_env.IsDevelopment()) {
+                DeveloperExceptionPageOptions developerExceptionPageOptions = new DeveloperExceptionPageOptions {
+                    SourceCodeLineCount = 10
+                };
+                app.UseDeveloperExceptionPage(developerExceptionPageOptions);
+            } else {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
-            
+            }
             app.UseCors("AllowCORS"); // Esta política permite acesso de qualquer origem. Remover esta linha em produção.
             app.UseDefaultFiles();
             app.UseStaticFiles();

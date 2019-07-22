@@ -1,4 +1,5 @@
 import axios from 'axios';
+import bsCustomFileInput from 'bs-custom-file-input';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -11,15 +12,15 @@ class AddNewProduct extends React.Component {
 
         this.state = {
             product: {
+                ean: '',
                 brand: '',
                 name: '',
-                ean: '',
-                continente: '',
-                lidl: '',
-                pingoDoce: '',
-                dia: '',
-                intermarche: '',
-                jumbo: '',
+                photo: {
+                    name: '',
+                    type: '',
+                    size: '',
+                    base64: '',
+                },
             },
             submitted: false,
             creating: false,
@@ -29,6 +30,7 @@ class AddNewProduct extends React.Component {
         this.componentDidMount = this.componentDidMount.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handlePhoto = this.handlePhoto.bind(this);
     }
 
     componentDidMount() {
@@ -36,6 +38,8 @@ class AddNewProduct extends React.Component {
         const { user } = this.props;
         if(!user) // Se não houver um utilizador logado
             history.push('/login'); // Redirecioná-lo para o login
+        bsCustomFileInput.init();
+        $('[data-toggle="tooltip"]').tooltip();
     }
     
     // Gravar propriedades do producto no estado do componente
@@ -45,18 +49,35 @@ class AddNewProduct extends React.Component {
         product[name] = value;
         this.setState({ product, created: false });
     }
+
+    handlePhoto(e) {
+        let { product } = this.state;
+        const file = e.target.files[0]; // Get the file
+        let reader = new FileReader(); // Make new FileReader
+        reader.readAsDataURL(file); // Convert the file to base64 text
+        reader.onload = () => { // on reader load
+            const photo = { // Make a fileInfo Object
+                name: file.name,
+                type: file.type,
+                size: Math.round(file.size / 1000) + ' kB',
+                base64: reader.result,
+            };
+            product['photo'] = photo; // Set product's photo
+            this.setState({ product, created: false }); // Save it to the state
+        }
+    }
     
     handleSubmit(e) {
-        e.preventDefault(); // Impedir que o formulário seja submetido para o servidor, já que queremos fazer uma chamada à sua API
+        e.preventDefault(); // Prevent form submission to the server, because we want to call the API endpoint
 
         this.setState({ submitted: true });
 
-        // Validar producto
+        // Validate product
         const { product } = this.state;
-		if (product.brand && product.name && product.ean && product.continente && product.dia && product.intermarche && product.pingoDoce && product.jumbo && product.lidl) {
+		if (product.ean && product.brand && product.name && product.photo) {
             this.setState({ creating: true });
 
-            // Pedir ao servidor para nos devolver toda a info acerca deste producto/ean
+            // Post new product data to API endpoint
             const headers = {
                 headers: {
                     ...authHeader(),
@@ -64,6 +85,7 @@ class AddNewProduct extends React.Component {
                 },
             };
             const url = `${config.baseURL}:${config.apiPort}/api/product/`;
+            console.log(product);
             axios
             .post(url, JSON.stringify(product), headers)
             .then(() => {
@@ -73,11 +95,12 @@ class AddNewProduct extends React.Component {
                 this.setState({error: true, errorMessage: error.response.data.message});
             });
 		}
-	}
+    }
 
     render() {
         const { submitted, creating, created, product, error, errorMessage } = this.state;
-        const { brand, name, ean, continente, dia, intermarche, pingoDoce, jumbo, lidl } = product;
+        const { ean, brand, name, photo } = product;
+        const continente = false; const lidl = false; const pingoDoce = false; const intermarche = false; const jumbo = false; const dia = false;
         return (
             <div className="container mt-4">
                 <h2>Add New Product</h2>
@@ -91,27 +114,38 @@ class AddNewProduct extends React.Component {
                 <form name="form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                     <div className="form-row justify-content-between align-items-start">
                         <div className="col-6">
-                            <div className={'form-group' + (submitted && !brand ? ' has-error' : '')}>
-                                <label htmlFor="brand">Brand</label>
+                            <div className="form-group">
+                                <label htmlFor="ean">EAN * <span className="badge badge-secondary" data-toggle="tooltip" data-placement="top" title="The European Article Numbers uniquely identifies a product, packaging and it's manufacturer.">?</span></label>
+                                <input type="text" pattern="[0-9]{13}" className={'form-control'} name="ean" value={ean} onChange={this.handleChange} required />
+                                {submitted &&
+                                    <div className="invalid-feedback">EAN needs to be 13 numbers.</div>
+                                }
+                            </div>
+                            <div className={'form-group'}>
+                                <label htmlFor="brand">Brand *</label>
                                 <input type="text" className="form-control" name="brand" value={brand} onChange={this.handleChange} required />
                                 {submitted && !brand &&
-                                    <div className="help-block">Brand is required</div>
+                                    <div className="invalid-feedback">Brand is required</div>
                                 }
                             </div>
-                            <div className={'form-group' + (submitted && !name ? ' has-error' : '')}>
-                                <label htmlFor="name">Name</label>
+                            <div className={'form-group'}>
+                                <label htmlFor="name">Name *</label>
                                 <input type="text" className="form-control" name="name" value={name} onChange={this.handleChange} required />
                                 {submitted && !name &&
-                                    <div className="help-block">Name is required</div>
+                                    <div className="invalid-feedback">Name is required</div>
                                 }
                             </div>
-                            <div className={'form-group' + (submitted && !ean ? ' has-error' : '')}>
-                                <label htmlFor="ean">EAN</label>
-                                <input type="text" className="form-control" name="ean" value={ean} onChange={this.handleChange} required />
-                                {submitted && !ean &&
-                                    <div className="help-block">EAN is required</div>
-                                }
+                            <label>Photo</label>
+                            <div className={'form-group custom-file'}>
+                                <label>Photo</label>
+                                <input type="file" className="custom-file-input" id="customFile" name="photo" onChange={this.handlePhoto} />
+                                <label className="custom-file-label" htmlFor="customFile">Choose photo</label>
                             </div>
+                                
+                            <div style={{height: 200, width: 200, marginBottom: 20}}>
+                                {photo.base64 && <img src={photo.base64} alt="Product photo preview" height="200px" />}
+                            </div>
+                            
                             <div className="form-group">
                                 <button className="btn btn-primary">Create new product</button>
                                 {creating &&

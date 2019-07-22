@@ -1,3 +1,19 @@
+## Setup
+
+1. Install [MongoDB](https://docs.mongodb.com/manual/administration/install-community/)
+2. Install [Node](https://nodejs.org/en/)
+3. Open a terminal and run the following commands:
+4. `mongod` to start the MongoDB server
+5. Go to the /Database folder and run:
+6. `mongoimport --db ThePriceIsRightDatabase --collection users --authenticationDatabase admin --drop --file users.json` to insert users
+7. and `mongoimport --db ThePriceIsRightDatabase --collection products --authenticationDatabase admin --drop --file products.json` to insert 3 products.
+
+Your database is now seeded and ready to go.
+
+## Run the project
+
+1. Open the project in VS Code and select `Debug -> Start debugging` (or F5).
+
 This project was bootstrapped on the client side with [Create React App](https://github.com/facebook/create-react-app) and on the server side with .net core.
 
 ## Available Scripts in the client
@@ -30,4 +46,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Available commands in the server
 
-In the main directory, if you're using VS Code, you can run the server by pressing F5.
+In the server directory, run:
+
+### `mongoimport --db ThePriceIsRightDatabase --collection users --authenticationDatabase admin --drop --file users.json`

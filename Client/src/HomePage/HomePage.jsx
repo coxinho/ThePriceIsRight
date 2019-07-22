@@ -110,19 +110,19 @@ class HomePage extends React.Component {
                             <div className="col-3" key={index}>
                                 <div className="card-deck">
                                     <div className="card mb-4" style={{width: 200 + 'px'}}>
-                                        <svg width="100%" height="80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#868e96"></rect></svg>
                                         <div className="card-body">
-                                            <h5 className="card-title">{product.brand}</h5>
-                                            <p className="card-text">{product.name}</p>
                                             <p className="card-text">{product.ean}</p>
-                                            <ul>
-                                                <li>Continente: {product.continente}€</li>
-                                                <li>Dia: {product.dia}€</li>
-                                                <li>Intermarche: {product.intermarche}€</li>
-                                                <li>Pingo-Doce: {product.pingoDoce}€</li>
-                                                <li>Jumbo: {product.jumbo}€</li>
-                                                <li>Lidl: {product.lidl}€</li>
-                                            </ul>
+                                            <p className="card-title">{product.brand}</p>
+                                            <p className="card-text">{product.name}</p>
+                                            {/*<ul style={{listStyleType: 'none', padding: '0'}}>
+                                                <li className="float-left">C: {product.continente}€</li>
+                                                <li className="float-left">D: {product.dia}€</li>
+                                                <li className="float-left">I: {product.intermarche}€</li>
+                                                <li className="float-left">P-D: {product.pingoDoce}€</li>
+                                                <li className="float-left">J: {product.jumbo}€</li>
+                                                <li className="float-left">L: {product.lidl}€</li>
+                                            </ul>*/}
+                                            <img width="100%" style={{marginBottom:20}} src={product.photo.base64} />
                                             <div className="container">
                                                 <div className="row justify-content-between">
                                                     <div className="col-6">
@@ -148,8 +148,9 @@ class HomePage extends React.Component {
                 <div className="row">
                     <div className="col-12">
                         <p>Engenharia Informática, Tecnologias da Internet 2, 2018/2019, Cristina Coxinho, nº8811</p>
-                        <p>Cliente: React, Redux, Bootstrap, Axios</p>
                         <p>Servidor: .Net Core Web API, JWT, MongoDB</p>
+                        <p>Cliente: React, Redux, Bootstrap, Axios</p>
+                        <p>Administrador: cristinacoxinho / 123456. Utilizador: luisacoxinho / 123456</p>
                     </div>
                 </div>
             </div>
@@ -167,4 +168,5 @@ function mapStateToProps(state) {
 
 const connectedHomePage = connect(mapStateToProps)(HomePage);
 export { connectedHomePage as HomePage };
+
 
