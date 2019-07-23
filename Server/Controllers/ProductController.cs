@@ -4,7 +4,7 @@ using Server.Models;
 using Server.Services;
 using Server.Helpers;
 
-namespace ThePriceIsRightApi.Controllers {
+namespace Server.Controllers {
     [Route("api/[controller]")]
     [Produces("application/json")]
     [Authorize]
@@ -31,12 +31,12 @@ namespace ThePriceIsRightApi.Controllers {
         // GET: api/Product?search=Nestle
         [AllowAnonymous]
         [HttpGet]
-        public JsonResult GetProducts(string search) => new JsonResult(_productService.GetProducts(search).ToArray());
+        public JsonResult GetProducts(string search) => new JsonResult(_productService.Search(search).ToArray());
 
         // GET: api/Product/5
         [AllowAnonymous] // Qualquer utilizador, mesmo que não esteja logado, pode ver os productos disponíveis (por id)
         [HttpGet("{id}")]
-        public JsonResult GetProduct(string id) => new JsonResult(_productService.GetProduct(id));
+        public JsonResult GetProduct(string id) => new JsonResult(_productService.Read(id));
 
         // PUT: api/Product/5
         [HttpPut("{id}")]

@@ -7,8 +7,6 @@ using System;
 using Microsoft.Extensions.Configuration;
 
 namespace Server.Services {
-
-    // Definir interface de comunicação com a classe UserServiceMongo
     public interface IUserService {
         User Register(User user, string password);
         User Login(string username, string password);
@@ -17,7 +15,6 @@ namespace Server.Services {
         void Update(User user, string password = null);
         void Delete(string id);
     }
-
 
     public class UserService : IUserService {
         private readonly IMongoCollection<User> _users; // _users é uma colecção com interface IMongoCollection do tipo classe User

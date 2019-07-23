@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
-// Rota privada utilizada para validar que o utilizador está logado
+// Private route used to validate a logged in user
 export const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => (
         localStorage.getItem('user')

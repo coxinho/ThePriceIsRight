@@ -7,6 +7,6 @@ namespace Server.Models {
         public string ean { get; set; }
         public string brand { get; set; }
         public string name { get; set; }
-        public Photo photo { get; set; }
+        public string photo { get; set; }
     }
 }

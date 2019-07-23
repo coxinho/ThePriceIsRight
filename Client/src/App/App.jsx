@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, Route, Router } from 'react-router-dom';
 import { Account } from '../Account';
-import { AddNewProduct } from '../AddNewProduct';
+import { AddNew } from '../AddNew';
+import { EditSupermarketBrands } from '../EditSupermarketBrands';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
 import { ProductUpdate } from '../ProductUpdate';
@@ -39,8 +40,8 @@ class App extends React.Component {
                                 <Link to="/"><b>The Price Is Right</b></Link>
                             </div>
                             {user && user.admin && <div className="col-sm text-center"><Link to="/add-new">Add new</Link></div>}
+                            {user && user.admin && <div className="col-sem text-center"><Link to="/edit-supermarkets">Edit Supermarkets</Link></div>}
                             {user && user.admin && <div className="col-sm text-center"><Link to="/users">Users</Link></div>}
-                            {/*user && <div class="col-sm"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>*/}
                             {user ?
                                 (<div className="col-sm text-right"><p>Hi <Link to="/account">{user.firstName}</Link>! <Link to="/login">Logout</Link></p></div>)
                                 :
@@ -56,7 +57,8 @@ class App extends React.Component {
                                         <Route path="/login" component={LoginPage} />
                                         <Route path="/register" component={RegisterPage} />
                                         <PrivateRoute path="/product-update" component={ProductUpdate} />
-                                        <PrivateRoute path="/add-new" component={AddNewProduct} />
+                                        <PrivateRoute path="/add-new" component={AddNew} />
+                                        <PrivateRoute path="/edit-supermarkets" component={EditSupermarketBrands} />
                                         <PrivateRoute path="/users" component={Users} />
                                         <PrivateRoute path="/account" component={Account} />
                                     </div>

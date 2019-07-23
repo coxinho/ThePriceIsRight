@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Server.Helpers;
 using Server.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
@@ -85,6 +84,8 @@ namespace Server {
             // Configure Dependency Injection (DI) for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ISupermarketBrandService, SupermarketBrandService>();
+            services.AddScoped<ISupermarketLocationService, SupermarketLocationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -114,15 +114,7 @@ class HomePage extends React.Component {
                                             <p className="card-text">{product.ean}</p>
                                             <p className="card-title">{product.brand}</p>
                                             <p className="card-text">{product.name}</p>
-                                            {/*<ul style={{listStyleType: 'none', padding: '0'}}>
-                                                <li className="float-left">C: {product.continente}€</li>
-                                                <li className="float-left">D: {product.dia}€</li>
-                                                <li className="float-left">I: {product.intermarche}€</li>
-                                                <li className="float-left">P-D: {product.pingoDoce}€</li>
-                                                <li className="float-left">J: {product.jumbo}€</li>
-                                                <li className="float-left">L: {product.lidl}€</li>
-                                            </ul>*/}
-                                            <img width="100%" style={{marginBottom:20}} src={product.photo.base64} />
+                                            <img width="100%" style={{marginBottom:20}} src={product.photo} />
                                             <div className="container">
                                                 <div className="row justify-content-between">
                                                     <div className="col-6">

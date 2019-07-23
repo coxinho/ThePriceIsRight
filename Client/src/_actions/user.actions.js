@@ -19,7 +19,7 @@ function login(username, password) {
             .then(
                 user => {
                     dispatch(success(user));
-                    history.push('/'); // Redirecionar utilizador para a página de entrada (Homepage)
+                    history.push('/'); // Redirect user to homepage
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -43,17 +43,17 @@ function register(user) {
         dispatch(request(user));
 
         userService.register(user)
-            .then(
-                user => { 
-                    dispatch(success());
-                    history.push('/login');
-                    dispatch(alertActions.success('Registration successful'));
-                },
-                error => {
-                    dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
-                }
-            );
+        .then(
+            user => { 
+                dispatch(success());
+                history.push('/login');
+                dispatch(alertActions.success('Registration successful'));
+            },
+            error => {
+                dispatch(failure(error.toString()));
+                dispatch(alertActions.error(error.toString()));
+            }
+        );
     };
 
     function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
