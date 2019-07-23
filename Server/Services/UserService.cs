@@ -18,6 +18,7 @@ namespace Server.Services {
         void Delete(string id);
     }
 
+
     public class UserService : IUserService {
         private readonly IMongoCollection<User> _users; // _users é uma colecção com interface IMongoCollection do tipo classe User
 
