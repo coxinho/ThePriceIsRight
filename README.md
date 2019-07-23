@@ -6,7 +6,7 @@
 4. `mongod` to start the MongoDB server
 5. Go to the /Database folder and run:
 6. `mongoimport --db ThePriceIsRightDatabase --collection users --authenticationDatabase admin --drop --file users.json` to insert users
-7. and `mongoimport --db ThePriceIsRightDatabase --collection supermarketBrands --authenticationDatabase admin --drop --file supermarketBrands.json` to insert products.
+7. and `mongoimport --db ThePriceIsRightDatabase --collection products --authenticationDatabase admin --drop --file products.json` to insert products.
 
 Your database is now seeded and ready to go.
 

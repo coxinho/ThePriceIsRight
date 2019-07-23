@@ -1,3 +1,0 @@
-{"_id":{"$oid":"5d235b3881a1d022717ea7f9"},"Ean":"34567543","Brand":"Nestle","Name":"Leite Meio-Gordo","Photo":null,"Continente":1.0,"Lidl":1.0,"PingoDoce":1.0,"Intermarche":1.0,"Jumbo":1.0,"Dia":1.0}
-{"_id":{"$oid":"5d237017e78dbe23f9ffa24a"},"Ean":"234567543","Brand":"Nestle","Name":"Leite Magro","Photo":null,"Continente":1.0,"Lidl":1.0,"PingoDoce":1.0,"Intermarche":1.0,"Jumbo":1.0,"Dia":1.0}
-{"_id":{"$oid":"5d2ce41b0289cf322962c350"},"Ean":"1234786543","Brand":"Nestle","Name":"Leite Gordo","Photo":null,"Continente":1.0,"Lidl":1.0,"PingoDoce":1.0,"Intermarche":1.0,"Jumbo":1.0,"Dia":1.0}
