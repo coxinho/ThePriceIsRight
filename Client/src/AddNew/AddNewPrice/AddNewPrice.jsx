@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { productActions } from '../../_actions';
 
 class AddNewPrice extends React.Component {
     constructor(props) {
@@ -55,7 +56,7 @@ class AddNewPrice extends React.Component {
                         <div className="input-group-prepend">
                             <span className="input-group-text">€</span>
                         </div>
-                        <input type="text" className="form-control" name="name" required />
+
                     </div>
                     
                     <div className="form-group">
