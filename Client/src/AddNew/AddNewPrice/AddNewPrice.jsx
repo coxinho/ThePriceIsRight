@@ -26,7 +26,7 @@ class AddNewPrice extends React.Component {
         e.preventDefault(); // Prevent form submission to the server, because we want to call the API endpoint
         this.setState({ submitted: true }); // Validate form
         const { ean, price } = this.state;
-        if (!ean || price) return; // If the fields are empty, return (form will be validated)
+        if (!ean || !price) return; // If the fields are empty, return (form will be validated)
         const product = {
             ean: ean,
             price: price,
