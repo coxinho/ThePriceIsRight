@@ -8,9 +8,9 @@ class AddNewPrice extends React.Component {
 
         this.state = {
             ean: '',
-            price: '',
             submitted: false,
-        };
+    };
+
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,7 +36,7 @@ class AddNewPrice extends React.Component {
     }
 
     render() {
-        const { ean, submitted } = this.state;
+        const { ean, price, submitted } = this.state;
         return (
             <form name="price-form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                 <div className="justify-content-between align-items-start">
