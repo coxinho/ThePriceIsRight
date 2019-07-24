@@ -8,9 +8,6 @@ class AddNewPrice extends React.Component {
 
         this.state = {
             ean: '',
-            brand: '',
-            name: '',
-            photo: '',
             price: '',
             submitted: false,
         };
@@ -27,15 +24,12 @@ class AddNewPrice extends React.Component {
     handleSubmit(e) {
         e.preventDefault(); // Prevent form submission to the server, because we want to call the API endpoint
         this.setState({ submitted: true }); // Validate form
-        const { ean, brand, name, photo } = this.state;
+        const { ean } = this.state;
         const {price} = this.state;
-        if (!ean || !brand || !name || !photo || !price) return; // If the fields are empty, return (form will be validated)
+        if (!ean || !price) return; // If the fields are empty, return (form will be validated)
         const product = {
             ean: ean,
-            brand: brand,
-            name: name,
             price: price,
-            photo: photo,
         };
         const { dispatch } = this.props;
         dispatch(productActions.create(product)); // Call the redux and server API
