@@ -10,6 +10,7 @@ class AddNewPrice extends React.Component {
             brand: '',
             name: '',
             photo: '',
+            price: '',
             submitted: false,
         };
 
@@ -54,7 +55,7 @@ class AddNewPrice extends React.Component {
                         <div className="input-group-prepend">
                             <span className="input-group-text">€</span>
                         </div>
-                        <input type="text" className="form-control" name="pingoDoce" required />
+                        <input type="text" className="form-control" name="name" required />
                     </div>
                     
                     <div className="form-group">
