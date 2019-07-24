@@ -126,7 +126,7 @@ class HomePage extends React.Component {
                                                         }}  className="btn btn-primary">Update</Link>}
                                                     </div>
                                                     <div className="col-6">
-                                                        {user && user.admin && <button className="btn btn-primary" onClick={() => this.deleteProduct(product.id, index)}>Delete</button>}
+                                                        {user && user.admin && <button className="btn btn-primary" onClick={() => this.deleteProduct(product.ean, index)}>Delete</button>}
                                                     </div>
                                                 </div>
                                             </div>
