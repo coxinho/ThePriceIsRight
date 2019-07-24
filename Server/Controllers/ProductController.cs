@@ -38,11 +38,13 @@ namespace Server.Controllers {
         [HttpGet("{id}")]
         public JsonResult GetProduct(string id) => new JsonResult(_productService.Read(id));
 
-        // PUT: api/Product/5
-        [HttpPut("{id}")]
-        public void Update(string ean, Product product) { // É necessário um utilizador estar logado para poder actualizar um producto
-            if(ean == product.ean) // Validar ids
-                _productService.Update(product); // Actualizar producto na base de dados
+        // PUT: api/Product/1234567890123
+        [HttpPut("{ean}")]
+        public IActionResult Update(string ean, Product product) { // É necessário um utilizador estar logado para poder actualizar um producto
+            if(ean != product.ean) // Validar ids
+                return BadRequest(new { message = "Product ids don't match" });
+            
+            return Ok(_productService.Update(product)); // Actualizar producto na base de dados
         }
 
         // DELETE: api/Product/5

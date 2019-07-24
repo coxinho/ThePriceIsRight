@@ -8,12 +8,12 @@ import { users } from './users.reducer';
 
 
 const rootReducer = combineReducers({
-  authentication,
-  registration,
-  users,
-  alert,
-  supermarketBrands,
-  supermarketLocation,
+	authentication,
+	registration,
+	users,
+	alert,
+	supermarketBrands,
+	supermarketLocation,
 });
 
 export default rootReducer;

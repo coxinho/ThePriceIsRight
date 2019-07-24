@@ -11,7 +11,7 @@ namespace Server.Services {
         Product Create(Product product);
         Product Read(string ean);
         List<Product> Search(string search);
-        void Update(Product product);
+        Product Update(Product product);
         void Delete(string id);
     }
 
@@ -37,7 +37,7 @@ namespace Server.Services {
         public List<Product> Search(string search) => _products.Find(product => product.brand.ToLower().Contains(search.ToLower()) || product.name.ToLower().Contains(search.ToLower()) || product.ean.ToLower().Contains(search.ToLower())).ToList();
 
         // Actualizar producto
-        public void Update(Product product) {
+        public Product Update(Product product) {
             // Validar id do producto
             var prod = Read(product.ean);
             if(prod == null)
@@ -49,6 +49,7 @@ namespace Server.Services {
             //prod.Ean = product.Ean; // Não é possível alterar o EAN. Apenas se podem criar productos novos com um determinado EAN.
 
             _products.ReplaceOne(p => p.ean == product.ean, prod); // Actualizar producto na base de dados
+            return prod;
         }
         public void Delete(string ean) {
             if(Read(ean) != null) { // Se um producto com este id existir na base dados
