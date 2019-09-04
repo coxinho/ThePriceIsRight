@@ -44,7 +44,7 @@ class AddNewPrice extends React.Component {
                     </div>
                     
                     <div className="form-group">
-                        <button className="btn btn-primary">Create new product</button>
+                        <button className="btn btn-primary">Create new price</button>
                     </div>
                 </div>
             </form>
