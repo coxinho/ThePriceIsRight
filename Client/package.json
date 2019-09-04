@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server --open",
-    "build": "webpack --mode production && ncp dist ../Server/wwwroot"
+    "build": "webpack --mode production && ncp src/vendor dist/src/vendor && ncp dist ../Server/wwwroot"
   },
   "dependencies": {
     "axios": "^0.19.0",
