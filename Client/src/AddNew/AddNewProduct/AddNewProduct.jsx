@@ -87,9 +87,11 @@ class AddNewProduct extends React.Component {
                         }
                     </div>
                         
-                    <div style={{height: 200, width: 200, marginBottom: 20}}>
-                        {photo && <img src={photo} alt="Product photo preview" height="200px" />}
-                    </div>
+                    {photo &&
+                        <div style={{height: 200, width: 200, marginBottom: 20}}>
+                            <img src={photo} alt="Product photo preview" height="200px" />
+                        </div>
+                    }
                     
                     <div className="form-group">
                         <button className="btn btn-primary">Create new product</button>

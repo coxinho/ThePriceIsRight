@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { supermarketLocationActions } from '../../_actions';
-import { SupermarketSelect } from './SupermarketSelect';
+import { SupermarketSelect } from '../SupermarketSelect';
 
 class AddNewSupermarketLocation extends React.Component {
     constructor(props) {

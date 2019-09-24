@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { supermarketBrandActions } from '../../../_actions';
+import { supermarketBrandActions } from '../../_actions';
 
 class SupermarketSelect extends React.Component {
     constructor(props) {

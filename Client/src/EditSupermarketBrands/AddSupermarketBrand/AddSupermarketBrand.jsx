@@ -51,7 +51,8 @@ class AddSupermarketBrand extends React.Component {
         this.setState({ submitted: true }); // Validate form
         const { dispatch } = this.props;
         const { supermarket } = this.state; // Extract object from state
-		if (!supermarket.name || !supermarket.logo) return; // If the fields are empty, return (form will be validated)
+        if (!supermarket.name || !supermarket.logo) return; // If the fields are empty, return (form will be validated)
+        if (confirm("Are you sure?") == false) return;
         dispatch(supermarketBrandActions.create(supermarket)); // Call the redux and server API
     }
 

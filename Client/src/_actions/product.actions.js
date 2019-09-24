@@ -18,7 +18,7 @@ function create(product) {
         .then(
             response => {
                 dispatch(success(response));
-                dispatch(alertActions.success('Product create successfully'));
+                dispatch(alertActions.success('Product created successfully'));
             },
             error => {
                 dispatch(failure(error.toString()));

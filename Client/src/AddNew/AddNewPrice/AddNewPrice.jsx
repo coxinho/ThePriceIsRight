@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { SupermarketSelect } from '../SupermarketSelect';
+import { SupermarketLocationSelect } from '../SupermarketLocationSelect';
 
 class AddNewPrice extends React.Component {
     constructor(props) {
@@ -28,7 +30,8 @@ class AddNewPrice extends React.Component {
                 <div className="justify-content-between align-items-start">
 
                     <h5>Add New Price</h5>
-                    
+                    <SupermarketSelect onSelect={ this.handleSelect } />
+                    <SupermarketLocationSelect />
                     <div className="form-group">
                         <label htmlFor="ean">EAN * <span className="badge badge-secondary" data-toggle="tooltip" data-placement="top" title="The European Article Numbers uniquely identifies a product, packaging and it's manufacturer.">?</span></label>
                         <input type="text" pattern="[0-9]{13}" className={'form-control'} name="ean" value={ean} onChange={this.handleChange} required />

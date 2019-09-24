@@ -45,7 +45,8 @@ class UpdateSupermarketBrand extends React.Component {
         this.setState({ submitted: true }); // Validate form
         const { dispatch } = this.props;
         const { id, name, logo } = this.state; // Extract object from state
-		if (!id || !name || !logo) return; // If the fields are empty, return (form will be validated)
+        if (!id || !name || !logo) return; // If the fields are empty, return (form will be validated)
+        if (confirm("Are you sure?") == false) return;
         const supermarketBrand = {
             id: id,
             name: name,
@@ -58,7 +59,8 @@ class UpdateSupermarketBrand extends React.Component {
         e.preventDefault();
         const { dispatch } = this.props;
         const { id } = this.state; // Extract object from state
-		if (!id) return; // If the fields are empty, return (form will be validated)
+        if (!id) return; // If the fields are empty, return (form will be validated)
+        if (confirm("Are you sure?") == false) return;
         dispatch(supermarketBrandActions._delete(id));
     }
 
