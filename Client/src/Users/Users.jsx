@@ -19,25 +19,26 @@ class Users extends React.Component {
     }
 
     render() {
-        const { users } = this.props;
+        const { users, user } = this.props;
         return (
             <div className="container mt-4">
                 <h2>All registered users:</h2>
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&
-                    <ul>
-                        {users.items.map((user, index) =>
-                            <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
+                    <div>
+                        {users.items.map((u, index) =>
+                            <p key={u.id}>
+                                {u.firstName + ' ' + u.lastName}
                                 {
-                                    user.deleting ? <em> - Deleting...</em>
-                                    : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                    : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
+                                    u.deleting ? <em> - Deleting...</em>
+                                    : u.deleteError ? <span className="text-danger"> - ERROR: {u.deleteError}</span>
+                                    : user.id == u.id ? <span>&nbsp;</span>
+                                    : <span> - <button className="btn btn-primary btn-sm" onClick={this.handleDeleteUser(u.id)}>Delete</button></span>
                                 }
-                            </li>
+                            </p>
                         )}
-                    </ul>
+                    </div>
                 }
             </div>
         );

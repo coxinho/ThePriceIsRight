@@ -5,6 +5,7 @@ import { supermarketLocationService } from '../_services';
 export const supermarketLocationActions = {
     create,
     getAll,
+    search,
     update,
     _delete,
 };
@@ -48,6 +49,25 @@ function getAll() {
     function request() { return { type: supermarketLocationConstants.GETALL_REQUEST } }
     function success(searchResult) { return { type: supermarketLocationConstants.GETALL_SUCCESS, searchResult } }
     function failure(error) { return { type: supermarketLocationConstants.GETALL_FAILURE, error } }
+}
+
+function search(selected, term) {
+    return dispatch => {
+        dispatch(request());
+
+        supermarketLocationService.search(selected, term)
+            .then(
+                searchResults => dispatch(success(searchResults)),
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request() { return { type: supermarketLocationConstants.SEARCH_REQUEST } }
+    function success(searchResults) { return { type: supermarketLocationConstants.SEARCH_SUCCESS, searchResults } }
+    function failure(error) { return { type: supermarketLocationConstants.SEARCH_FAILURE, error } }
 }
 
 function update(supermarketLocation) {

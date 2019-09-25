@@ -41,7 +41,7 @@ class SupermarketSelect extends React.Component {
         const { supermarketBrands } = this.state;
         const { searchResults } = supermarketBrands;
         const selectedSupermarket = searchResults.find(el => el.id === selectedSupermarketId);
-        this.props.onSelect(selectedSupermarket);
+        this.props.onSelect(selectedSupermarket.id);
     }
 
     render() {

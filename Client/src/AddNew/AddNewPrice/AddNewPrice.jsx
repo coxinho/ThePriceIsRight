@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { priceActions } from '../../_actions';
 import { SupermarketSelect } from '../SupermarketSelect';
 import { SupermarketLocationSelect } from '../SupermarketLocationSelect';
+import { ProductSelect } from '../ProductSelect';
 
 class AddNewPrice extends React.Component {
     constructor(props) {
@@ -14,36 +16,74 @@ class AddNewPrice extends React.Component {
             photo: '',
             submitted: false,
         };
-
-        this.handleChange = this.handleChange.bind(this);
+        
+        this.handleSupermarketSelect = this.handleSupermarketSelect.bind(this);
+        this.handleSupermarketLocationSelect = this.handleSupermarketLocationSelect.bind(this);
+        this.handleProductSelect = this.handleProductSelect.bind(this);
+        this.handlePrice = this.handlePrice.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
+
+    handleSupermarketSelect(selectedSupermarketId) {
+        this.setState({
+            selectedSupermarketId: selectedSupermarketId
+        });
+    }
+
+    handleSupermarketLocationSelect(selectedLocationId) {
+        this.setState({
+            selectedLocationId: selectedLocationId
+        });
+    }
+
+    handleProductSelect(selectedEan) {
+        this.setState({
+            selectedEan: selectedEan
+        });
+    }
+
+    handlePrice(e) {
+        const price = e.target.value;
+        if(price == '') return;
+        this.setState({
+            price: price
+        });
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const { dispatch, user } = this.props;
+        const { selectedSupermarketId, selectedLocationId, selectedEan, price } = this.state;
+        if(selectedSupermarketId == '' || selectedLocationId == '' || selectedEan == '' || price == '') return;
+        const newPrice = {
+            idUser: user.id,
+            idSupermarket: selectedSupermarketId,
+            idLocation: selectedLocationId,
+            ean: selectedEan,
+            price: price
+        };
+        dispatch(priceActions.create(newPrice)); // Call the redux and server API
     }
 
     render() {
-        const { ean, submitted } = this.state;
+        const { submitted, selectedSupermarketId } = this.state;
         return (
             <form name="price-form" onSubmit={this.handleSubmit} className={(submitted ? 'was-validated' : '')} noValidate>
                 <div className="justify-content-between align-items-start">
 
                     <h5>Add New Price</h5>
-                    <SupermarketSelect onSelect={ this.handleSelect } />
-                    <SupermarketLocationSelect />
+                    <SupermarketSelect onSelect={ this.handleSupermarketSelect } />
+                    {selectedSupermarketId && 
+                        <SupermarketLocationSelect selectedSupermarketId={selectedSupermarketId} onSelect={ this.handleSupermarketLocationSelect } />
+                    }
+                    <ProductSelect onSelect={ this.handleProductSelect } />
                     <div className="form-group">
-                        <label htmlFor="ean">EAN * <span className="badge badge-secondary" data-toggle="tooltip" data-placement="top" title="The European Article Numbers uniquely identifies a product, packaging and it's manufacturer.">?</span></label>
-                        <input type="text" pattern="[0-9]{13}" className={'form-control'} name="ean" value={ean} onChange={this.handleChange} required />
-                        {submitted &&
-                            <div className="invalid-feedback">EAN needs to be 13 numbers.</div>
-                        }
-                    </div>
-                    <div className="input-group">
-                        <div className="input-group-prepend">
-                            <span className="input-group-text">€</span>
+                        <div className="input-group mt-5">
+                            <div className="input-group-prepend">
+                                <span className="input-group-text">€</span>
+                            </div>
+                            <input type="text" className="form-control" name="price" onChange={this.handlePrice} required />
                         </div>
-                        <input type="text" className="form-control" name="pingoDoce" required />
                     </div>
                     
                     <div className="form-group">

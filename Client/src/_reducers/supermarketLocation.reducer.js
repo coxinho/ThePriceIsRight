@@ -1,6 +1,6 @@
 import { supermarketLocationConstants } from '../_constants';
 
-export function supermarketLocation(state = {}, action) {
+export function supermarketLocations(state = {}, action) {
 	switch (action.type) {
 		case supermarketLocationConstants.CREATE_REQUEST:
 			return {
@@ -31,6 +31,19 @@ export function supermarketLocation(state = {}, action) {
 				searchResults: [...action.searchResult],
 			};
 		case supermarketLocationConstants.GETALL_FAILURE:
+			return { 
+				error: action.error
+			};
+
+		case supermarketLocationConstants.SEARCH_REQUEST:
+			return {
+				loading: true
+			};
+		case supermarketLocationConstants.SEARCH_SUCCESS:
+			return {
+				searchResults: [...action.searchResults],
+			};
+		case supermarketLocationConstants.SEARCH_FAILURE:
 			return { 
 				error: action.error
 			};

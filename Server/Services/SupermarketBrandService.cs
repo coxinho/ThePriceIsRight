@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 namespace Server.Services {
     public interface ISupermarketBrandService {
         SupermarketBrand Create(SupermarketBrand supermarketBrand);
+        SupermarketBrand Read(string id);
         List<SupermarketBrand> ReadAll();
         SupermarketBrand Update(SupermarketBrand supermarketBrand);
         string Delete(string id);

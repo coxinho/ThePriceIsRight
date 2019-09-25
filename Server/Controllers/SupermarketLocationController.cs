@@ -27,10 +27,10 @@ namespace Server.Controllers {
         }
         
         // GET: api/SupermarketLocation
-        // GET: api/SupermarketLocation?search=Jumbo
+        // GET: api/SupermarketLocation?search=Abrantes&supermarketId=345345234
         [AllowAnonymous]
         [HttpGet]
-        public JsonResult Search(string search) => new JsonResult(_supermarketLocationService.Search(search).ToArray());
+        public JsonResult Search(string supermarketId, string search) => new JsonResult(_supermarketLocationService.Search(supermarketId, search).ToArray());
 
         // PUT: api/SupermarketLocation/5
         [HttpPut("{id}")]

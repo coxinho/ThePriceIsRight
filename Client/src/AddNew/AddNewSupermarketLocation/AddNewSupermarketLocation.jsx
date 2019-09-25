@@ -29,18 +29,17 @@ class AddNewSupermarketLocation extends React.Component {
         this.setState({ [name]: value });
     }
 
-    handleSelect(selectedSupermarket) {
-        this.setState({ supermarketBrand: selectedSupermarket });
+    handleSelect(selectedSupermarketId) {
+        this.setState({ selectedSupermarketId: selectedSupermarketId });
     }
     
     handleSubmit(e) {
         e.preventDefault(); // Prevent form submission to the server, because we want to call the API endpoint
         this.setState({ submitted: true }); // Validate form
-        const { supermarketBrand, location, latitude, longitude } = this.state;
-        const { id, name, logo } = supermarketBrand;
-        if (!id || !name || !logo || !location || !latitude || !longitude) return; // If the fields are empty, return (form will be validated)
+        const { selectedSupermarketId, location, latitude, longitude } = this.state;
+        if (!selectedSupermarketId || !location || !latitude || !longitude) return; // If the fields are empty, return (form will be validated)
         const supermarketLocation = {
-            idSupermarketBrand: id,
+            idSupermarketBrand: selectedSupermarketId,
             location,
             latitude,
             longitude,

@@ -83,6 +83,7 @@ namespace Server {
 
 			// Configure Dependency Injection (DI) for application services
 			services.AddScoped<IUserService, UserService>();
+			services.AddScoped<IPriceService, PriceService>();
 			services.AddScoped<IProductService, ProductService>();
 			services.AddScoped<ISupermarketBrandService, SupermarketBrandService>();
 			services.AddScoped<ISupermarketLocationService, SupermarketLocationService>();

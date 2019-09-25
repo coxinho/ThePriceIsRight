@@ -4,6 +4,7 @@ import { authHeader } from '../_helpers';
 export const supermarketLocationService = {
     create,
     getAll,
+    search,
     update,
     _delete,
 };
@@ -23,6 +24,13 @@ function getAll() {
         method: 'GET',
     };
     return fetch(`${config.apiUrl}/api/SupermarketLocation`, requestOptions).then(handleResponse);
+}
+
+function search(selected, term) {
+    const requestOptions = {
+        method: 'GET',
+    };
+    return fetch(`${config.apiUrl}/api/SupermarketLocation?supermarketId=${selected}&search=${term}`, requestOptions).then(handleResponse);
 }
 
 function update(supermarketLocation) {

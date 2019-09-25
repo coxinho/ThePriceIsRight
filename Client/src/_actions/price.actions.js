@@ -1,24 +1,20 @@
 import { alertActions } from '.';
-import { productConstants } from '../_constants';
-import { productService } from '../_services';
+import { priceConstants } from '../_constants';
+import { priceService } from '../_services';
 
-export const productActions = {
+export const priceActions = {
     create,
-    getById,
-    search,
-    update,
-    _delete,
 };
 
-function create(product) {
+function create(price) {
     return dispatch => {
         dispatch(request());
 
-        productService.create(product)
+        priceService.create(price)
         .then(
             response => {
                 dispatch(success(response));
-                dispatch(alertActions.success('Product created successfully'));
+                dispatch(alertActions.success('Price created successfully'));
             },
             error => {
                 dispatch(failure(error.toString()));
@@ -27,18 +23,18 @@ function create(product) {
         );
     };
 
-    function request() { return { type: productConstants.CREATE_REQUEST } }
-    function success(product) { return { type: productConstants.CREATE_SUCCESS, product } }
-    function failure(error) { return { type: productConstants.CREATE_FAILURE, error } }
+    function request() { return { type: priceConstants.CREATE_REQUEST } }
+    function success(price) { return { type: priceConstants.CREATE_SUCCESS, price } }
+    function failure(error) { return { type: priceConstants.CREATE_FAILURE, error } }
 }
 
 function getById(id) {
     return dispatch => {
         dispatch(request());
 
-        productService.getById(id)
+        priceService.getById(id)
             .then(
-                product => dispatch(success(product)),
+                price => dispatch(success(price)),
                 error => {
                     dispatch(failure(error.toString()));
                     dispatch(alertActions.error(error.toString()));
@@ -46,16 +42,16 @@ function getById(id) {
             );
     };
 
-    function request() { return { type: productConstants.GETALL_REQUEST } }
-    function success(product) { return { type: productConstants.GETALL_SUCCESS, product } }
-    function failure(error) { return { type: productConstants.GETALL_FAILURE, error } }
+    function request() { return { type: priceConstants.GETALL_REQUEST } }
+    function success(price) { return { type: priceConstants.GETALL_SUCCESS, price } }
+    function failure(error) { return { type: priceConstants.GETALL_FAILURE, error } }
 }
 
 function search(search) {
     return dispatch => {
         dispatch(request());
 
-        productService.search(search)
+        priceService.search(search)
             .then(
                 searchResults => dispatch(success(searchResults)),
                 error => {
@@ -65,16 +61,16 @@ function search(search) {
             );
     };
 
-    function request() { return { type: productConstants.SEARCH_REQUEST } }
-    function success(searchResults) { return { type: productConstants.SEARCH_SUCCESS, searchResults } }
-    function failure(error) { return { type: productConstants.SEARCH_FAILURE, error } }
+    function request() { return { type: priceConstants.SEARCH_REQUEST } }
+    function success(searchResults) { return { type: priceConstants.SEARCH_SUCCESS, searchResults } }
+    function failure(error) { return { type: priceConstants.SEARCH_FAILURE, error } }
 }
 
 function update(supermarketBrand) {
     return dispatch => {
         dispatch(request());
 
-        productService.update(supermarketBrand)
+        priceService.update(supermarketBrand)
             .then(
                 updatedSupermarketBrand => {
                     dispatch(success(updatedSupermarketBrand));
@@ -87,9 +83,9 @@ function update(supermarketBrand) {
             );
     };
 
-    function request() { return { type: productConstants.UPDATE_REQUEST } }
-    function success(updatedBrand) { return { type: productConstants.UPDATE_SUCCESS, updatedBrand } }
-    function failure(error) { return { type: productConstants.UPDATE_FAILURE, error } }
+    function request() { return { type: priceConstants.UPDATE_REQUEST } }
+    function success(updatedBrand) { return { type: priceConstants.UPDATE_SUCCESS, updatedBrand } }
+    function failure(error) { return { type: priceConstants.UPDATE_FAILURE, error } }
 }
 
 // delete is a JS reserved word, so we need to use _delete instead
@@ -97,7 +93,7 @@ function _delete(id) {
     return dispatch => {
         dispatch(request());
         
-        productService._delete(id)
+        priceService._delete(id)
             .then(
                 response => {
                     dispatch(success(response));
@@ -110,8 +106,8 @@ function _delete(id) {
             );
     };
 
-    function request() { return { type: productConstants.DELETE_REQUEST } }
-    function success(id) { return { type: productConstants.DELETE_SUCCESS, id } }
-    function failure(error) { return { type: productConstants.DELETE_FAILURE, error } }
+    function request() { return { type: priceConstants.DELETE_REQUEST } }
+    function success(id) { return { type: priceConstants.DELETE_SUCCESS, id } }
+    function failure(error) { return { type: priceConstants.DELETE_FAILURE, error } }
 
 }
