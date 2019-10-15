@@ -52,16 +52,16 @@ class App extends React.Component {
                             <div className="col-sm">
                                 {alert.message && <div className={`alert ${alert.type}`}>{alert.message}</div> }
                                 
-                                    <div>
-                                        <Route exact path="/" component={HomePage} />
-                                        <Route path="/login" component={LoginPage} />
-                                        <Route path="/register" component={RegisterPage} />
-                                        <PrivateRoute path="/product-update" component={ProductUpdate} />
-                                        <PrivateRoute path="/add-new" component={AddNew} />
-                                        <PrivateRoute path="/edit-supermarkets" component={EditSupermarketBrands} />
-                                        <PrivateRoute path="/users" component={Users} />
-                                        <PrivateRoute path="/account" component={Account} />
-                                    </div>
+                                <div>
+                                    <Route exact path="/" component={HomePage} />
+                                    <Route path="/login" component={LoginPage} />
+                                    <Route path="/register" component={RegisterPage} />
+                                    <PrivateRoute path="/product-update" component={ProductUpdate} />
+                                    <PrivateRoute path="/add-new" component={AddNew} />
+                                    <PrivateRoute path="/edit-supermarkets" component={EditSupermarketBrands} />
+                                    <PrivateRoute path="/users" component={Users} />
+                                    <PrivateRoute path="/account" component={Account} />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -38,6 +38,7 @@ class AddNewProduct extends React.Component {
         this.setState({ submitted: true }); // Validate form
         const { ean, brand, name, photo } = this.state;
         if (!ean || !brand || !name || !photo) return; // If the fields are empty, return (form will be validated)
+        if (ean.length != 13 || isNaN(ean)) return; // If EAN is not 13 numbers, return
         const product = {
             ean: ean,
             brand: brand,
